@@ -20,8 +20,12 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.github.paddan.test.injection;
+package com.github.paddan.test.injection.test_classes;
 
-public interface ClassToInject {
+class SuperSuperInjectTarget {
+    private ClassToInject superSuperDummy;
 
+    public ClassToInject getSuperSuperDummy() {
+        return superSuperDummy;
+    }
 }

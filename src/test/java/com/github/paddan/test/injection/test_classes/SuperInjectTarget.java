@@ -20,12 +20,21 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.github.paddan.test.injection;
+package com.github.paddan.test.injection.test_classes;
 
-class SuperSuperInjectTarget {
-    private ClassToInject superSuperDummy;
+import com.github.paddan.test.annotations.MySecondAnnotation;
 
-    public ClassToInject getSuperSuperDummy() {
-        return superSuperDummy;
+class SuperInjectTarget extends SuperSuperInjectTarget {
+    @MySecondAnnotation
+    private ClassToInject superAnnotatedField;
+
+    private ClassToInject superNamedField;
+
+    public ClassToInject getSuperNamedField() {
+        return superNamedField;
+    }
+
+    public ClassToInject getSuperAnnotatedField() {
+        return superAnnotatedField;
     }
 }

@@ -20,21 +20,34 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.github.paddan.test.injection;
+package com.github.paddan.test.injection.test_classes;
 
-import com.github.paddan.test.annotations.MySecondAnnotation;
+import com.github.paddan.test.annotations.MyFirstAnnotation;
 
-class SuperInjectTarget extends SuperSuperInjectTarget {
-    @MySecondAnnotation
-    private ClassToInject superClassToInject;
+public class InjectTarget extends SuperInjectTarget {
+
+    @MyFirstAnnotation
+    private ClassToInject annotatedField;
+
+    private ClassToInject namedField;
     
-    private ClassToInject superDummy;
+    private static String staticField = "This is static!";
 
-    ClassToInject getSuperDummy() {
-        return superDummy;
+    private final String finalField = "This is final!";
+    
+    public static String getStaticField() {
+        return staticField;
     }
 
-    ClassToInject getSuperClassToInject() {
-        return superClassToInject;
+    public String getFinalField() {
+        return finalField;
+    }
+
+    public ClassToInject getAnnotatedField() {
+        return annotatedField;
+    }
+
+    public ClassToInject getNamedField() {
+        return namedField;
     }
 }

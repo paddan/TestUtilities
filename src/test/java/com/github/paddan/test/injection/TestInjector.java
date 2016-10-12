@@ -29,6 +29,8 @@ import static org.mockito.Mockito.mock;
 
 import java.lang.reflect.Field;
 
+import com.github.paddan.test.injection.test_classes.ClassToInject;
+import com.github.paddan.test.injection.test_classes.InjectTarget;
 import org.junit.Test;
 
 import com.github.paddan.test.annotations.MyFirstAnnotation;
@@ -44,7 +46,7 @@ public class TestInjector {
         InjectTarget dummy = new InjectTarget();
         ClassToInject inject = mock(ClassToInject.class);
         Injector.inject(inject, ClassToInject.class, dummy, MyFirstAnnotation.class);
-        assertEquals(inject, dummy.getClassToInject());
+        assertEquals(inject, dummy.getAnnotatedField());
     }
 
     @Test
@@ -52,30 +54,30 @@ public class TestInjector {
         InjectTarget dummy = new InjectTarget();
         ClassToInject inject = mock(ClassToInject.class);
         Injector.inject(inject, ClassToInject.class, dummy, MySecondAnnotation.class);
-        assertEquals(inject, dummy.getSuperClassToInject());
+        assertEquals(inject, dummy.getSuperAnnotatedField());
     }
 
     @Test
     public void shouldInjectObjectForName() throws Exception {
         InjectTarget dummy = new InjectTarget();
         ClassToInject inject = mock(ClassToInject.class);
-        Injector.inject(inject, ClassToInject.class, dummy, "dummy");
-        assertEquals(inject, dummy.getDummy());
+        Injector.inject(inject, ClassToInject.class, dummy, "namedField");
+        assertEquals(inject, dummy.getNamedField());
     }
 
     @Test
     public void shouldInjectIntoSuperClass() throws Exception {
         InjectTarget dummy = new InjectTarget();
         ClassToInject inject = mock(ClassToInject.class);
-        Injector.inject(inject, ClassToInject.class, dummy, "superDummy");
-        assertEquals(inject, dummy.getSuperDummy());
+        Injector.inject(inject, ClassToInject.class, dummy, "superNamedField");
+        assertEquals(inject, dummy.getSuperNamedField());
     }
 
     @Test
     public void shouldGetAllFieldsIncludingSuperClasses() throws Exception {
         InjectTarget dummy = new InjectTarget();
         Field[] fields = getFields(dummy.getClass());
-        assertEquals(6, fields.length);
+        assertEquals(7, fields.length);
     }
 
     @Test

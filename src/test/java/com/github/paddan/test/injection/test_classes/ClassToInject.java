@@ -20,29 +20,8 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.github.paddan.test.injection;
+package com.github.paddan.test.injection.test_classes;
 
-import com.github.paddan.test.annotations.MyFirstAnnotation;
-
-public class InjectTarget extends SuperInjectTarget {
-
-    @MyFirstAnnotation
-    private ClassToInject classToInject;
-
-    private ClassToInject dummy;
-    
-    private static String staticField = "This is static!";
-    
-    public ClassToInject getClassToInject() {
-        return classToInject;
-    }
-
-    public ClassToInject getDummy() {
-        return dummy;
-    }
-
-    static String getStaticField() {
-        return staticField;
-    }
+public interface ClassToInject {
 
 }

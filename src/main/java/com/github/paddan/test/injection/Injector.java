@@ -36,16 +36,28 @@ public final class Injector {
     private Injector() {
     }
 
+    /**
+     * Injects a value into a annotated field.
+     *
+     * @param value The value to inject
+     * @param valueClass The class of the value to inject
+     * @param into The object into which the value is injected
+     * @param withAnnotationClass The annotation class with which the field is annotated
+     *
+     * @return The value injected
+     *
+     * @throws IllegalAccessException If the field cannot be accessed
+     * @throws NoSuchFieldException If the field doesn't exist with the specified type and annotation
+     */
     public static <T> T inject(T value, Class<? extends T> valueClass, Object into,
                                Class<? extends Annotation> withAnnotationClass) throws IllegalAccessException, NoSuchFieldException {
         Field[] fields = getFields(into.getClass());
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
-            if (field.getAnnotation(withAnnotationClass) != null && field.getType().equals(valueClass)) {
-                setField(value, into, field);
-                return value;
-            }
+      for (Field field : fields) {
+        if (field.getAnnotation(withAnnotationClass) != null && field.getType().equals(valueClass)) {
+          setField(value, into, field);
+          return value;
         }
+      }
         throw new IllegalArgumentException("Couldn't inject a " + value.getClass().getName() + " into "
             + into.getClass().getName() + " using annotation " + withAnnotationClass.getName());
     }
@@ -59,53 +71,96 @@ public final class Injector {
         field.set(into, value);
     }
 
+    /**
+     * Injects a value into a named field.
+     *
+     * @param value The value to inject
+     * @param valueClass The class of the value to inject
+     * @param into The object into which the value is injected
+     * @param name The name of the field
+     *
+     * @return The value injected
+     *
+     * @throws IllegalAccessException If the field cannot be accessed
+     * @throws NoSuchFieldException If the field doesn't exist with the specified type and annotation
+     */
     public static <T> T inject(T value, Class<? extends T> valueClass, Object into, String name)
         throws IllegalAccessException, NoSuchFieldException {
         Field[] fields = getFields(into.getClass());
 
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i].getName().equals(name)) {
-                if (fields[i].getType().equals(valueClass)) {
-                    setField(value, into, fields[i]);
-                    return value;
-                }
-                else if (fields[i].getType().isPrimitive()) {
-                    setField(value, into, fields[i]);
-                    return value;
-                }
-            }
+      for (Field field : fields) {
+        if (field.getName().equals(name)) {
+          if (field.getType().equals(valueClass)) {
+            setField(value, into, field);
+            return value;
+          }
+          else if (field.getType().isPrimitive()) {
+            setField(value, into, field);
+            return value;
+          }
         }
+      }
         throw new IllegalArgumentException("Couldn't inject a " + value.getClass().getName() + " into "
             + into.getClass().getName() + " using field " + name);
     }
 
+    /**
+     * Injects a value into a static field.
+     *
+     * @param value The value to inject
+     * @param valueClass The class of the value to inject
+     * @param into The class into which the value is injected
+     * @param name The name of the field
+     *
+     * @return The value injected
+     *
+     * @throws IllegalAccessException If the field cannot be accessed
+     * @throws NoSuchFieldException If the field doesn't exist with the specified type and annotation
+     */
     public static <T> T inject(T value, Class<? extends T> valueClass, Class<?> into, String name)
         throws IllegalAccessException, NoSuchFieldException {
         Field[] fields = getFields(into);
 
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i].getName().equals(name) && fields[i].getType().equals(valueClass)) {
-                setField(value, into, fields[i]);
-                return value;
-            }
+      for (Field field : fields) {
+        if (matches(valueClass, name, field)) {
+          setField(value, into, field);
+          return value;
         }
+      }
         throw new IllegalArgumentException("Couldn't inject a " + value.getClass().getName() + " into "
             + into.getClass().getName() + " using field " + name);
     }
 
+  private static <T> boolean matches(Class<? extends T> valueClass, String name, Field field) {
+    return field.getName().equals(name) && field.getType().equals(valueClass);
+  }
+
+  /**
+     * Injects a value into a named field of a specific super class.
+     *
+     * @param value The value to inject
+     * @param valueClass The class of the value to inject
+     * @param into The class into which the value is injected
+     * @param name The name of the field
+     * @param declared The super class where the field is declared
+     *
+     * @return The value injected
+     *
+     * @throws IllegalAccessException If the field cannot be accessed
+     * @throws NoSuchFieldException If the field doesn't exist with the specified type and annotation
+     */
     public static <T> T inject(T value, Class<? extends T> valueClass, Object into, String name, Class<?> declared)
         throws IllegalAccessException, NoSuchFieldException {
         Field[] fields = getFields(into.getClass());
 
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i].getName().equals(name) && fields[i].getType().equals(valueClass)
-                && fields[i].getDeclaringClass().equals(declared)) {
-                setField(value, into, fields[i]);
-                return value;
-            }
+      for (Field field : fields) {
+        if (field.getName().equals(name) && field.getType().equals(valueClass)
+            && field.getDeclaringClass().equals(declared)) {
+          setField(value, into, field);
+          return value;
         }
+      }
         throw new IllegalArgumentException("Couldn't inject a " + value.getClass().getName() + " into "
             + into.getClass().getName() + " using field " + name + " declared in " + declared.getName());
     }
-
 }

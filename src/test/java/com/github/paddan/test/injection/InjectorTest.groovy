@@ -1,6 +1,9 @@
 package com.github.paddan.test.injection
 
 import com.github.paddan.test.annotations.MyFirstAnnotation
+import com.github.paddan.test.injection.test_classes.ClassToInject
+import com.github.paddan.test.injection.test_classes.InjectTarget
+import spock.lang.Ignore
 import spock.lang.Specification
 
 import static com.github.paddan.test.injection.Injector.inject
@@ -14,21 +17,32 @@ class InjectorTest extends Specification {
         classToInject = Mock(ClassToInject)
     }
 
-    def "Should inject mock for field annotated with MyFirstAnnotation"() {
+    def "Should inject a mock object for field annotated with MyFirstAnnotation"() {
         when:
         inject(classToInject, ClassToInject, target, MyFirstAnnotation)
 
         then:
-        !target.dummy
-        target.classToInject == classToInject
+        !target.namedField
+        target.annotatedField == classToInject
     }
 
-    def "Should inject mock into field named dummy"() {
+    def "Should inject a mock object into field named namedField"() {
         when:
-        inject(classToInject, ClassToInject, target, "dummy")
+        inject(classToInject, ClassToInject, target, "namedField")
 
         then:
-        !target.classToInject
-        target.dummy == classToInject
+        !target.annotatedField
+        target.namedField == classToInject
+    }
+
+    @Ignore
+    def "Should inject a string object into the final field named finalField"() {
+        when:
+        inject("Hello!", String, target, "finalField")
+
+        then:
+        !target.annotatedField
+        !target.namedField
+        target.finalField == "Hello!"
     }
 }
