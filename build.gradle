@@ -1,0 +1,19 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'com.github.paddan'
+version = '1.0'
+
+description = """TestUtilities"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'org.mockito', name: 'mockito-all', version:'1.8.5'
+    testCompile group: 'junit', name: 'junit', version:'4.8.1'
+}
