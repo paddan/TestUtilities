@@ -20,9 +20,9 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.lindefors.tools.test.access;
+package com.github.paddan.test.access;
 
-import static com.lindefors.tools.test.utils.FieldHelper.getFields;
+import static com.github.paddan.test.utils.FieldHelper.getFields;
 
 import java.lang.reflect.Field;
 

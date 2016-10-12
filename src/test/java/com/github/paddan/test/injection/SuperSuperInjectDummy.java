@@ -20,21 +20,13 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.lindefors.tools.test.injection;
+package com.github.paddan.test.injection;
 
-import com.lindefors.tools.test.annotations.MySecondAnnotation;
+public class SuperSuperInjectDummy {
 
-public class SuperInjectDummy extends SuperSuperInjectDummy {
-    @MySecondAnnotation
-    private ClassToInject superClassToInject;
-    
-    private ClassToInject superDummy;
+    private ClassToInject superSuperDummy;
 
-    public ClassToInject getSuperDummy() {
-        return superDummy;
-    }
-
-    public ClassToInject getSuperClassToInject() {
-        return superClassToInject;
+    public ClassToInject getSuperSuperDummy() {
+        return superSuperDummy;
     }
 }

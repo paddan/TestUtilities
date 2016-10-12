@@ -20,7 +20,7 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.lindefors.tools.test.injection;
+package com.github.paddan.test.injection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -31,15 +31,12 @@ import java.lang.annotation.RetentionPolicy;
 
 import org.junit.Test;
 
-import com.lindefors.tools.test.injection.AutoInjector;
-import com.lindefors.tools.test.injection.AutoInjector.Mocks;
-
 public class TestAutoInjector {
 
     @Test
     public void shouldInjectMocksAutomatically() throws Exception {
         AutoInjectorTarget target = new AutoInjectorTarget();
-        Mocks mocks = AutoInjector.autoMock(target, InjectAnnotation.class, AnotherInjectAnnotation.class);
+        AutoInjector.Mocks mocks = AutoInjector.autoMock(target, InjectAnnotation.class, AnotherInjectAnnotation.class);
 
         assertEquals(mocks.get(A.class), target.a());
         assertEquals(mocks.get(B.class), target.getB());
@@ -49,7 +46,7 @@ public class TestAutoInjector {
     @Test
     public void shouldInjectIntoParent() throws Exception {
         AutoInjectorChildTarget target = new AutoInjectorChildTarget();
-        Mocks mocks = AutoInjector.autoMock(target, InjectAnnotation.class, AnotherInjectAnnotation.class);
+        AutoInjector.Mocks mocks = AutoInjector.autoMock(target, InjectAnnotation.class, AnotherInjectAnnotation.class);
 
         assertEquals(mocks.get(A.class), target.a());
         assertEquals(mocks.get(B.class), target.getB());
@@ -59,7 +56,7 @@ public class TestAutoInjector {
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailForRequestForUnknownInterface() throws Exception {
         AutoInjectorTarget target = new AutoInjectorTarget();
-        Mocks mocks = AutoInjector.autoMock(target, InjectAnnotation.class, AnotherInjectAnnotation.class);
+        AutoInjector.Mocks mocks = AutoInjector.autoMock(target, InjectAnnotation.class, AnotherInjectAnnotation.class);
         mocks.get(C.class);
     }
 
@@ -67,7 +64,7 @@ public class TestAutoInjector {
     @Test
     public void shouldHandleDuplicateFields() throws Exception {
         AutoInjectorTargetWithDuplicateFields target = new AutoInjectorTargetWithDuplicateFields();
-        Mocks mocks = AutoInjector.autoMock(target, InjectAnnotation.class, AnotherInjectAnnotation.class);
+        AutoInjector.Mocks mocks = AutoInjector.autoMock(target, InjectAnnotation.class, AnotherInjectAnnotation.class);
         A mockedA = mocks.get(A.class);
         assertEquals(mockedA, target.a1);
         assertEquals(mockedA, target.a2);
@@ -100,7 +97,7 @@ public class TestAutoInjector {
     @Test
     public void shouldInjectNamedFields() throws Exception {
         AutoInjectorTargetWithNamedField target = new AutoInjectorTargetWithNamedField();
-        Mocks mocks = AutoInjector.autoMock(target, "namedField");
+        AutoInjector.Mocks mocks = AutoInjector.autoMock(target, "namedField");
         assertEquals(mocks.get("namedField"), target.namedField());
     }
 
@@ -115,7 +112,7 @@ public class TestAutoInjector {
     @Test(expected = IllegalArgumentException.class)
     public void shouldFailForGettingOfUnknownNamedField() throws Exception {
         AutoInjectorTargetWithNamedField target = new AutoInjectorTargetWithNamedField();
-        Mocks mocks = AutoInjector.autoMock(target, "namedField");
+        AutoInjector.Mocks mocks = AutoInjector.autoMock(target, "namedField");
         mocks.get("unkownNamedField");
     }
 
@@ -123,7 +120,7 @@ public class TestAutoInjector {
     @Test
     public void shouldBeAbleToGetMocksByNameEvenIfItWasInjectedByAnnotation() throws Exception {
         AutoInjectorTarget target = new AutoInjectorTarget();
-        Mocks mocks = AutoInjector.autoMock(target, InjectAnnotation.class);
+        AutoInjector.Mocks mocks = AutoInjector.autoMock(target, InjectAnnotation.class);
         assertEquals(mocks.get("a"), target.a());
     }
 
@@ -131,7 +128,7 @@ public class TestAutoInjector {
     @Test
     public void shouldBeAbleToGetMocksByTypeEvenIfItWasInjectedByName() throws Exception {
         AutoInjectorTargetWithNamedField target = new AutoInjectorTargetWithNamedField();
-        Mocks mocks = AutoInjector.autoMock(target, "namedField");
+        AutoInjector.Mocks mocks = AutoInjector.autoMock(target, "namedField");
         assertEquals(mocks.get(A.class), target.namedField());
     }
 

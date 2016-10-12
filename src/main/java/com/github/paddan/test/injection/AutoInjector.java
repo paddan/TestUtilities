@@ -21,7 +21,7 @@
 //    SOFTWARE.
 
 
-package com.lindefors.tools.test.injection;
+package com.github.paddan.test.injection;
 
 import static org.mockito.Mockito.mock;
 

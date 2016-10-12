@@ -20,28 +20,29 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.lindefors.tools.test.access;
+package com.github.paddan.test.injection;
 
-import static com.lindefors.tools.test.utils.FieldHelper.getFields;
+import com.github.paddan.test.annotations.MyFirstAnnotation;
 
-import java.lang.reflect.Field;
+public class InjectDummy extends SuperInjectDummy {
 
-public final class Accessor {
+    @MyFirstAnnotation
+    private ClassToInject classToInject;
 
-    @SuppressWarnings("unchecked")
-    public static <T> T access(String name, Class<? extends T> valueClass, Object from) throws IllegalAccessException {
-        Field[] fields = getFields(from.getClass());
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
-            if (name.equals(field.getName()) && field.getType().equals(valueClass)) {
-                field.setAccessible(true);
-                return (T) field.get(from);
-            }
-        }
-
-        throw new IllegalArgumentException("Couldn't access " + name + " from " + from.getClass().getName());
+    private ClassToInject dummy;
+    
+    private static String staticField = "This is static!";
+    
+    public ClassToInject getClassToInject() {
+        return classToInject;
     }
 
-    private Accessor() {
+    public ClassToInject getDummy() {
+        return dummy;
     }
+
+    public static String getStaticField() {
+        return staticField;
+    }
+
 }

@@ -20,28 +20,10 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.lindefors.tools.test.utils;
+package com.github.paddan.test.access;
 
-import java.lang.reflect.Field;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+public class PrivateClass {
 
-public final class FieldHelper {
-
-    public static Field[] getFields(Class<?> thisClass) {
-        Field[] fields = thisClass.getDeclaredFields();
-        Class<?> superClass = thisClass.getSuperclass();
-
-        if (superClass != Object.class) {
-            List<Field> superClassFields = new LinkedList<Field>(Arrays.asList(getFields(superClass)));
-            superClassFields.addAll(Arrays.asList(fields));
-            return superClassFields.toArray(new Field[superClassFields.size()]);
-        }
-
-        return fields;
-    }
-
-    private FieldHelper() {
-    }
+    @SuppressWarnings("unused")
+    private String privateField = "this is private";
 }

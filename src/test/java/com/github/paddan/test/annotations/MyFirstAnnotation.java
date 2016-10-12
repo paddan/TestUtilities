@@ -20,13 +20,14 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.lindefors.tools.test.injection;
+package com.github.paddan.test.annotations;
 
-public class SuperSuperInjectDummy {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    private ClassToInject superSuperDummy;
-
-    public ClassToInject getSuperSuperDummy() {
-        return superSuperDummy;
-    }
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MyFirstAnnotation {
 }

@@ -20,10 +20,20 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.lindefors.tools.test.access;
+package com.github.paddan.test.access;
 
-public class PrivateClass {
+import static org.junit.Assert.assertEquals;
 
-    @SuppressWarnings("unused")
-    private String privateField = "this is private";
+import org.junit.Test;
+
+public class TestAccessor {
+
+    @Test
+    public void shouldAccessPrivateField() throws Exception {
+        PrivateClass privateClass = new PrivateClass();
+
+        String privateField = (String) Accessor.access("privateField", String.class, privateClass);
+
+        assertEquals("this is private", privateField);
+    }
 }

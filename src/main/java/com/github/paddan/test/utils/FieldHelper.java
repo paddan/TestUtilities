@@ -20,7 +20,7 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.lindefors.tools.test.utils;
+package com.github.paddan.test.utils;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;

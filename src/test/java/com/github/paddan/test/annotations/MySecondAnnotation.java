@@ -20,29 +20,15 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.lindefors.tools.test.injection;
+package com.github.paddan.test.annotations;
 
-import com.lindefors.tools.test.annotations.MyFirstAnnotation;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class InjectDummy extends SuperInjectDummy {
-
-    @MyFirstAnnotation
-    private ClassToInject classToInject;
-
-    private ClassToInject dummy;
-    
-    private static String staticField = "This is static!";
-    
-    public ClassToInject getClassToInject() {
-        return classToInject;
-    }
-
-    public ClassToInject getDummy() {
-        return dummy;
-    }
-
-    public static String getStaticField() {
-        return staticField;
-    }
+@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME)
+public @interface MySecondAnnotation {
 
 }

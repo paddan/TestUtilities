@@ -20,43 +20,21 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.lindefors.tools.test.construction;
+package com.github.paddan.test.injection;
 
-/**
- * 
- * @author patrik.lindefors
- *
- */
-public final class PrivateClass {
-    
-    private String string;
+import com.github.paddan.test.annotations.MySecondAnnotation;
 
-    private PrivateClass() {
-        
-    }
+public class SuperInjectDummy extends SuperSuperInjectDummy {
+    @MySecondAnnotation
+    private ClassToInject superClassToInject;
     
-    private PrivateClass(String string, Long longer) {
-        this.string = string;
-        
+    private ClassToInject superDummy;
+
+    public ClassToInject getSuperDummy() {
+        return superDummy;
     }
 
-    @SuppressWarnings("unused")
-    private static String returnStringFromStatic() {
-        return "hej";
-    }
-    
-    @SuppressWarnings("unused")
-    private static String returnStringFromStatic(String retVal) {
-        return retVal;
-    }
-    
-    @SuppressWarnings("unused")
-    private String returnString() {
-        return string;
-    }
-    
-    @SuppressWarnings("unused")
-    private String returnString(String retVal) {
-        return retVal;
+    public ClassToInject getSuperClassToInject() {
+        return superClassToInject;
     }
 }

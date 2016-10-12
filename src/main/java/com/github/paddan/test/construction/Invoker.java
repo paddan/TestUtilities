@@ -20,7 +20,7 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.lindefors.tools.test.construction;
+package com.github.paddan.test.construction;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;

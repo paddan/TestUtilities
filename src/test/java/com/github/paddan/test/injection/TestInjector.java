@@ -20,9 +20,9 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.lindefors.tools.test.injection;
+package com.github.paddan.test.injection;
 
-import static com.lindefors.tools.test.utils.FieldHelper.getFields;
+import static com.github.paddan.test.utils.FieldHelper.getFields;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.mock;
@@ -31,14 +31,11 @@ import java.lang.reflect.Field;
 
 import org.junit.Test;
 
-import com.lindefors.tools.test.injection.Injector;
-import com.lindefors.tools.test.annotations.MyFirstAnnotation;
-import com.lindefors.tools.test.annotations.MySecondAnnotation;
+import com.github.paddan.test.annotations.MyFirstAnnotation;
+import com.github.paddan.test.annotations.MySecondAnnotation;
 
 /**
- * 
  * @author patrik.lindefors
- *
  */
 public class TestInjector {
 
@@ -71,9 +68,9 @@ public class TestInjector {
         InjectDummy dummy = new InjectDummy();
         ClassToInject inject = mock(ClassToInject.class);
         Injector.inject(inject, ClassToInject.class, dummy, "superDummy");
-        assertEquals(inject, dummy.getSuperDummy());        
+        assertEquals(inject, dummy.getSuperDummy());
     }
-    
+
     @Test
     public void shouldGetAllFieldsIncludingSuperClasses() throws Exception {
         InjectDummy dummy = new InjectDummy();
@@ -85,27 +82,27 @@ public class TestInjector {
     public void shouldInjectIntoStaticField() throws Exception {
         InjectDummy dummy = new InjectDummy();
         Injector.inject("Injected", String.class, dummy, "staticField");
-        
+
         assertEquals("Injected", InjectDummy.getStaticField());
     }
-    
+
     @Test
     public void shouldInjectNullIntoStaticField() throws Exception {
         InjectDummy dummy = new InjectDummy();
         Injector.inject(null, String.class, dummy, "staticField");
-       
+
         assertNull(InjectDummy.getStaticField());
     }
-    
+
     @SuppressWarnings("static-access")
     @Test
     public void shouldInjectToClass() throws Exception {
         Injector.inject("Injected", String.class, InjectDummy.class, "staticField");
-        
+
         assertEquals("Injected", InjectDummy.getStaticField());
         assertEquals("Injected", (new InjectDummy()).getStaticField());
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenStaticFieldIsMissing() throws Exception {
         Injector.inject("Injected", String.class, InjectDummy.class, "notAField");
