@@ -22,26 +22,30 @@
 
 package com.github.paddan.test.access;
 
-import static com.github.paddan.test.utils.FieldHelper.getFields;
-
 import java.lang.reflect.Field;
 
 public final class Accessor {
+    private Accessor() {
+    }
 
-    @SuppressWarnings("unchecked")
-    public static <T> T access(String name, Class<? extends T> valueClass, Object from) throws IllegalAccessException {
-        Field[] fields = getFields(from.getClass());
-        for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
-            if (name.equals(field.getName()) && field.getType().equals(valueClass)) {
-                field.setAccessible(true);
-                return (T) field.get(from);
+    public static Object getField(String field, Object from) throws IllegalAccessException {
+        Field privateField = null;
+        Class<?> type = from.getClass();
+
+        while (privateField == null) {
+            try {
+                privateField = type.getDeclaredField(field);
+            }
+            catch (NoSuchFieldException e) {
+                type = type.getSuperclass();
+                if (type == Object.class) {
+                    throw new IllegalArgumentException("Couldn't find field " + field, e);
+                }
             }
         }
 
-        throw new IllegalArgumentException("Couldn't access " + name + " from " + from.getClass().getName());
-    }
+        privateField.setAccessible(true);
 
-    private Accessor() {
+        return privateField.get(from);
     }
 }

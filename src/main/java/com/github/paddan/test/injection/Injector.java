@@ -26,53 +26,86 @@ import static com.github.paddan.test.utils.FieldHelper.getFields;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 /**
- * 
  * @author patrik.lindefors
- * 
  */
 public final class Injector {
 
-    public static <T> void inject(T value, Class<? extends T> valueClass, Class<?> into, String name) throws IllegalAccessException {
-        setField(value, valueClass, into, name, getFields(into));
+    private Injector() {
     }
 
-    public static <T> void inject(T value, Class<? extends T> valueClass, Object into, Class<? extends Annotation> withAnnotationClass)
-            throws IllegalAccessException {
+    public static <T> T inject(T value, Class<? extends T> valueClass, Object into,
+                               Class<? extends Annotation> withAnnotationClass) throws IllegalAccessException, NoSuchFieldException {
         Field[] fields = getFields(into.getClass());
-        
         for (int i = 0; i < fields.length; i++) {
             Field field = fields[i];
             if (field.getAnnotation(withAnnotationClass) != null && field.getType().equals(valueClass)) {
-                field.setAccessible(true);
-                field.set(into, value);
-                return;
+                setField(value, into, field);
+                return value;
             }
         }
-        
-        throw new IllegalArgumentException("Couldn't inject a " + value.getClass().getName() + " into " + into.getClass().getName() + " using annotation "
-                + withAnnotationClass.getName());
+        throw new IllegalArgumentException("Couldn't inject a " + value.getClass().getName() + " into "
+            + into.getClass().getName() + " using annotation " + withAnnotationClass.getName());
     }
 
-    public static <T> void inject(T value, Class<? extends T> valueClass, Object into, String name) throws IllegalAccessException {
-        setField(value, valueClass, into, name, getFields(into.getClass()));
+    private static <T> void setField(T value, Object into, Field field) throws IllegalAccessException,
+        NoSuchFieldException {
+        field.setAccessible(true);
+        Field modifiersField = Field.class.getDeclaredField("modifiers");
+        modifiersField.setAccessible(true);
+        modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+        field.set(into, value);
     }
 
-    private static <T> void setField(T value, Class<? extends T> valueClass, Object into, String name, Field[] fields) throws IllegalAccessException {
+    public static <T> T inject(T value, Class<? extends T> valueClass, Object into, String name)
+        throws IllegalAccessException, NoSuchFieldException {
+        Field[] fields = getFields(into.getClass());
+
         for (int i = 0; i < fields.length; i++) {
-            Field field = fields[i];
-            if (field.getName().equals(name) && field.getType().equals(valueClass)) {
-                field.setAccessible(true);
-                field.set(into, value);
-                return;
+            if (fields[i].getName().equals(name)) {
+                if (fields[i].getType().equals(valueClass)) {
+                    setField(value, into, fields[i]);
+                    return value;
+                }
+                else if (fields[i].getType().isPrimitive()) {
+                    setField(value, into, fields[i]);
+                    return value;
+                }
             }
         }
-
-        throw new IllegalArgumentException("Couldn't inject a " + value.getClass().getName() + " into " + into.getClass().getName() + " using field " + name);
+        throw new IllegalArgumentException("Couldn't inject a " + value.getClass().getName() + " into "
+            + into.getClass().getName() + " using field " + name);
     }
 
-    private Injector() {
+    public static <T> T inject(T value, Class<? extends T> valueClass, Class<?> into, String name)
+        throws IllegalAccessException, NoSuchFieldException {
+        Field[] fields = getFields(into);
+
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i].getName().equals(name) && fields[i].getType().equals(valueClass)) {
+                setField(value, into, fields[i]);
+                return value;
+            }
+        }
+        throw new IllegalArgumentException("Couldn't inject a " + value.getClass().getName() + " into "
+            + into.getClass().getName() + " using field " + name);
+    }
+
+    public static <T> T inject(T value, Class<? extends T> valueClass, Object into, String name, Class<?> declared)
+        throws IllegalAccessException, NoSuchFieldException {
+        Field[] fields = getFields(into.getClass());
+
+        for (int i = 0; i < fields.length; i++) {
+            if (fields[i].getName().equals(name) && fields[i].getType().equals(valueClass)
+                && fields[i].getDeclaringClass().equals(declared)) {
+                setField(value, into, fields[i]);
+                return value;
+            }
+        }
+        throw new IllegalArgumentException("Couldn't inject a " + value.getClass().getName() + " into "
+            + into.getClass().getName() + " using field " + name + " declared in " + declared.getName());
     }
 
 }

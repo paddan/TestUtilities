@@ -32,7 +32,7 @@ public class TestAccessor {
     public void shouldAccessPrivateField() throws Exception {
         PrivateClass privateClass = new PrivateClass();
 
-        String privateField = (String) Accessor.access("privateField", String.class, privateClass);
+        String privateField = (String) Accessor.getField("privateField", privateClass);
 
         assertEquals("this is private", privateField);
     }

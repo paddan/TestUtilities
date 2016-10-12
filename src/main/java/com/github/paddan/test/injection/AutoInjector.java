@@ -94,10 +94,8 @@ public final class AutoInjector {
 
     private static void verifyNamedMocks(List<Object> injectionTargets, Set<String> injectedNames) {
         for (Object target : injectionTargets) {
-            if (target instanceof String) {
-                if (!injectedNames.contains(target)) {
-                    throw new IllegalArgumentException("Could not find a field named " + target);
-                }
+            if (target instanceof String && !injectedNames.contains(target)) {
+                throw new IllegalArgumentException("Could not find a field named " + target);
             }
         }
     }
