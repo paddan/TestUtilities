@@ -41,7 +41,7 @@ public class TestInjector {
 
     @Test
     public void shouldInjectObjectForMyFirstAnnotation() throws Exception {
-        InjectDummy dummy = new InjectDummy();
+        InjectTarget dummy = new InjectTarget();
         ClassToInject inject = mock(ClassToInject.class);
         Injector.inject(inject, ClassToInject.class, dummy, MyFirstAnnotation.class);
         assertEquals(inject, dummy.getClassToInject());
@@ -49,7 +49,7 @@ public class TestInjector {
 
     @Test
     public void shouldInjectObjectForAnnotationIntoSuperClass() throws Exception {
-        InjectDummy dummy = new InjectDummy();
+        InjectTarget dummy = new InjectTarget();
         ClassToInject inject = mock(ClassToInject.class);
         Injector.inject(inject, ClassToInject.class, dummy, MySecondAnnotation.class);
         assertEquals(inject, dummy.getSuperClassToInject());
@@ -57,7 +57,7 @@ public class TestInjector {
 
     @Test
     public void shouldInjectObjectForName() throws Exception {
-        InjectDummy dummy = new InjectDummy();
+        InjectTarget dummy = new InjectTarget();
         ClassToInject inject = mock(ClassToInject.class);
         Injector.inject(inject, ClassToInject.class, dummy, "dummy");
         assertEquals(inject, dummy.getDummy());
@@ -65,7 +65,7 @@ public class TestInjector {
 
     @Test
     public void shouldInjectIntoSuperClass() throws Exception {
-        InjectDummy dummy = new InjectDummy();
+        InjectTarget dummy = new InjectTarget();
         ClassToInject inject = mock(ClassToInject.class);
         Injector.inject(inject, ClassToInject.class, dummy, "superDummy");
         assertEquals(inject, dummy.getSuperDummy());
@@ -73,48 +73,48 @@ public class TestInjector {
 
     @Test
     public void shouldGetAllFieldsIncludingSuperClasses() throws Exception {
-        InjectDummy dummy = new InjectDummy();
+        InjectTarget dummy = new InjectTarget();
         Field[] fields = getFields(dummy.getClass());
         assertEquals(6, fields.length);
     }
 
     @Test
     public void shouldInjectIntoStaticField() throws Exception {
-        InjectDummy dummy = new InjectDummy();
+        InjectTarget dummy = new InjectTarget();
         Injector.inject("Injected", String.class, dummy, "staticField");
 
-        assertEquals("Injected", InjectDummy.getStaticField());
+        assertEquals("Injected", InjectTarget.getStaticField());
     }
 
     @Test
     public void shouldInjectNullIntoStaticField() throws Exception {
-        InjectDummy dummy = new InjectDummy();
+        InjectTarget dummy = new InjectTarget();
         Injector.inject(null, String.class, dummy, "staticField");
 
-        assertNull(InjectDummy.getStaticField());
+        assertNull(InjectTarget.getStaticField());
     }
 
     @SuppressWarnings("static-access")
     @Test
     public void shouldInjectToClass() throws Exception {
-        Injector.inject("Injected", String.class, InjectDummy.class, "staticField");
+        Injector.inject("Injected", String.class, InjectTarget.class, "staticField");
 
-        assertEquals("Injected", InjectDummy.getStaticField());
-        assertEquals("Injected", (new InjectDummy()).getStaticField());
+        assertEquals("Injected", InjectTarget.getStaticField());
+        assertEquals("Injected", (new InjectTarget()).getStaticField());
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenStaticFieldIsMissing() throws Exception {
-        Injector.inject("Injected", String.class, InjectDummy.class, "notAField");
+        Injector.inject("Injected", String.class, InjectTarget.class, "notAField");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenFieldIsMissing() throws Exception {
-        Injector.inject("Injected", String.class, new InjectDummy(), "notAField");
+        Injector.inject("Injected", String.class, new InjectTarget(), "notAField");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenAnnotatedFieldIsMissing() throws Exception {
-        Injector.inject("Injected", String.class, InjectDummy.class, Test.class);
+        Injector.inject("Injected", String.class, InjectTarget.class, Test.class);
     }
 }

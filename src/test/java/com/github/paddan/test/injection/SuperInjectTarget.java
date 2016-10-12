@@ -22,11 +22,19 @@
 
 package com.github.paddan.test.injection;
 
-public class SuperSuperInjectDummy {
+import com.github.paddan.test.annotations.MySecondAnnotation;
 
-    private ClassToInject superSuperDummy;
+class SuperInjectTarget extends SuperSuperInjectTarget {
+    @MySecondAnnotation
+    private ClassToInject superClassToInject;
+    
+    private ClassToInject superDummy;
 
-    public ClassToInject getSuperSuperDummy() {
-        return superSuperDummy;
+    ClassToInject getSuperDummy() {
+        return superDummy;
+    }
+
+    ClassToInject getSuperClassToInject() {
+        return superClassToInject;
     }
 }

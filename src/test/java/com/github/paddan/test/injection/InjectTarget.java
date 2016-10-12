@@ -22,19 +22,27 @@
 
 package com.github.paddan.test.injection;
 
-import com.github.paddan.test.annotations.MySecondAnnotation;
+import com.github.paddan.test.annotations.MyFirstAnnotation;
 
-public class SuperInjectDummy extends SuperSuperInjectDummy {
-    @MySecondAnnotation
-    private ClassToInject superClassToInject;
+public class InjectTarget extends SuperInjectTarget {
+
+    @MyFirstAnnotation
+    private ClassToInject classToInject;
+
+    private ClassToInject dummy;
     
-    private ClassToInject superDummy;
-
-    public ClassToInject getSuperDummy() {
-        return superDummy;
+    private static String staticField = "This is static!";
+    
+    public ClassToInject getClassToInject() {
+        return classToInject;
     }
 
-    public ClassToInject getSuperClassToInject() {
-        return superClassToInject;
+    public ClassToInject getDummy() {
+        return dummy;
     }
+
+    static String getStaticField() {
+        return staticField;
+    }
+
 }

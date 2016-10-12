@@ -5,20 +5,30 @@ import spock.lang.Specification
 
 import static com.github.paddan.test.injection.Injector.inject
 
-/**
- * Created by patrik.lindefors on 2016-10-12.
- */
 class InjectorTest extends Specification {
+    InjectTarget target
+    ClassToInject classToInject
 
-    def "Should inject object for MyFirstAnnotation"() {
-        setup:
-        def target = new InjectDummy()
-        def toBeInjected = Mock(ClassToInject)
+    void setup() {
+        target = new InjectTarget()
+        classToInject = Mock(ClassToInject)
+    }
 
+    def "Should inject mock for field annotated with MyFirstAnnotation"() {
         when:
-        inject(toBeInjected, ClassToInject, target, MyFirstAnnotation)
+        inject(classToInject, ClassToInject, target, MyFirstAnnotation)
 
         then:
-        target.classToInject == toBeInjected
+        !target.dummy
+        target.classToInject == classToInject
+    }
+
+    def "Should inject mock into field named dummy"() {
+        when:
+        inject(classToInject, ClassToInject, target, "dummy")
+
+        then:
+        !target.classToInject
+        target.dummy == classToInject
     }
 }
