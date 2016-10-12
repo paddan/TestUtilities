@@ -2,14 +2,12 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.lindefors.test</groupId>
+    <groupId>com.github.paddan</groupId>
     <artifactId>TestUtilities</artifactId>
     <version>1.0</version>
-    <packaging>jar</packaging>
 
     <name>TestUtilities</name>
     <description>Test utilities for injection and access into objects</description>
-    <url>http://maven.apache.org</url>
 
     <licenses>
         <license>
@@ -18,10 +16,6 @@
             <distribution>repo</distribution>
         </license>
     </licenses>
-
-    <scm>
-        <url>https://github.com/paddan/TestUtilities</url>
-    </scm>
 
     <build>
         <finalName>${artifactId}-${version}</finalName>
@@ -42,13 +36,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.mockito</groupId>
@@ -60,11 +47,6 @@
             <artifactId>junit</artifactId>
             <version>4.8.1</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.User</groupId>
-            <artifactId>Repo</artifactId>
-            <version>1.0</version>
         </dependency>
     </dependencies>
 </project>
