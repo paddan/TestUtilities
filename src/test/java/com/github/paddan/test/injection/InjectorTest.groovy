@@ -3,7 +3,6 @@ package com.github.paddan.test.injection
 import com.github.paddan.test.annotations.MyFirstAnnotation
 import com.github.paddan.test.injection.test_classes.ClassToInject
 import com.github.paddan.test.injection.test_classes.InjectTarget
-import spock.lang.Ignore
 import spock.lang.Specification
 
 import static com.github.paddan.test.injection.Injector.inject
@@ -35,7 +34,6 @@ class InjectorTest extends Specification {
         target.namedField == classToInject
     }
 
-    @Ignore
     def "Should inject a string object into the final field named finalField"() {
         when:
         inject("Hello!", String, target, "finalField")

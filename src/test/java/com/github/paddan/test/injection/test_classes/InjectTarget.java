@@ -26,6 +26,10 @@ import com.github.paddan.test.annotations.MyFirstAnnotation;
 
 public class InjectTarget extends SuperInjectTarget {
 
+    public InjectTarget() {
+        finalField = "This is final!";
+    }
+
     @MyFirstAnnotation
     private ClassToInject annotatedField;
 
@@ -33,7 +37,7 @@ public class InjectTarget extends SuperInjectTarget {
     
     private static String staticField = "This is static!";
 
-    private final String finalField = "This is final!";
+    private final String finalField;
     
     public static String getStaticField() {
         return staticField;

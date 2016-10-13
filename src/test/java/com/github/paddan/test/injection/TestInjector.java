@@ -22,6 +22,7 @@
 
 package com.github.paddan.test.injection;
 
+import static com.github.paddan.test.injection.Injector.inject;
 import static com.github.paddan.test.utils.FieldHelper.getFields;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -45,7 +46,7 @@ public class TestInjector {
     public void shouldInjectObjectForMyFirstAnnotation() throws Exception {
         InjectTarget dummy = new InjectTarget();
         ClassToInject inject = mock(ClassToInject.class);
-        Injector.inject(inject, ClassToInject.class, dummy, MyFirstAnnotation.class);
+        inject(inject, ClassToInject.class, dummy, MyFirstAnnotation.class);
         assertEquals(inject, dummy.getAnnotatedField());
     }
 
@@ -53,7 +54,7 @@ public class TestInjector {
     public void shouldInjectObjectForAnnotationIntoSuperClass() throws Exception {
         InjectTarget dummy = new InjectTarget();
         ClassToInject inject = mock(ClassToInject.class);
-        Injector.inject(inject, ClassToInject.class, dummy, MySecondAnnotation.class);
+        inject(inject, ClassToInject.class, dummy, MySecondAnnotation.class);
         assertEquals(inject, dummy.getSuperAnnotatedField());
     }
 
@@ -61,15 +62,22 @@ public class TestInjector {
     public void shouldInjectObjectForName() throws Exception {
         InjectTarget dummy = new InjectTarget();
         ClassToInject inject = mock(ClassToInject.class);
-        Injector.inject(inject, ClassToInject.class, dummy, "namedField");
+        inject(inject, ClassToInject.class, dummy, "namedField");
         assertEquals(inject, dummy.getNamedField());
+    }
+
+    @Test
+    public void shouldInjectStringIntoFinalField() throws Exception {
+        InjectTarget dummy = new InjectTarget();
+        inject("Hello!", String.class, dummy, "finalField");
+        assertEquals("Hello!", dummy.getFinalField());
     }
 
     @Test
     public void shouldInjectIntoSuperClass() throws Exception {
         InjectTarget dummy = new InjectTarget();
         ClassToInject inject = mock(ClassToInject.class);
-        Injector.inject(inject, ClassToInject.class, dummy, "superNamedField");
+        inject(inject, ClassToInject.class, dummy, "superNamedField");
         assertEquals(inject, dummy.getSuperNamedField());
     }
 
@@ -83,7 +91,7 @@ public class TestInjector {
     @Test
     public void shouldInjectIntoStaticField() throws Exception {
         InjectTarget dummy = new InjectTarget();
-        Injector.inject("Injected", String.class, dummy, "staticField");
+        inject("Injected", String.class, dummy, "staticField");
 
         assertEquals("Injected", InjectTarget.getStaticField());
     }
@@ -91,7 +99,7 @@ public class TestInjector {
     @Test
     public void shouldInjectNullIntoStaticField() throws Exception {
         InjectTarget dummy = new InjectTarget();
-        Injector.inject(null, String.class, dummy, "staticField");
+        inject(null, String.class, dummy, "staticField");
 
         assertNull(InjectTarget.getStaticField());
     }
@@ -99,7 +107,7 @@ public class TestInjector {
     @SuppressWarnings("static-access")
     @Test
     public void shouldInjectToClass() throws Exception {
-        Injector.inject("Injected", String.class, InjectTarget.class, "staticField");
+        inject("Injected", String.class, InjectTarget.class, "staticField");
 
         assertEquals("Injected", InjectTarget.getStaticField());
         assertEquals("Injected", (new InjectTarget()).getStaticField());
@@ -107,16 +115,16 @@ public class TestInjector {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenStaticFieldIsMissing() throws Exception {
-        Injector.inject("Injected", String.class, InjectTarget.class, "notAField");
+        inject("Injected", String.class, InjectTarget.class, "notAField");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenFieldIsMissing() throws Exception {
-        Injector.inject("Injected", String.class, new InjectTarget(), "notAField");
+        inject("Injected", String.class, new InjectTarget(), "notAField");
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionWhenAnnotatedFieldIsMissing() throws Exception {
-        Injector.inject("Injected", String.class, InjectTarget.class, Test.class);
+        inject("Injected", String.class, InjectTarget.class, Test.class);
     }
 }
