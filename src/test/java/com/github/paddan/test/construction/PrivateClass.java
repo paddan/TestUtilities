@@ -30,14 +30,15 @@ package com.github.paddan.test.construction;
 public final class PrivateClass {
     
     private String string;
+    private Long number;
 
     private PrivateClass() {
         
     }
     
-    private PrivateClass(String string, Long longer) {
+    private PrivateClass(String string, Long number) {
         this.string = string;
-        
+        this.number = number;
     }
 
     @SuppressWarnings("unused")
@@ -49,14 +50,27 @@ public final class PrivateClass {
     private static String returnStringFromStatic(String retVal) {
         return retVal;
     }
-    
+
     @SuppressWarnings("unused")
-    private String returnString() {
+    private String returnStringFromPrivate() {
+        return "hej";
+    }
+
+    @SuppressWarnings("unused")
+    private String returnStringFromPrivate(String retVal) {
+        return retVal;
+    }
+
+    @SuppressWarnings("unused")
+    private String getPrivateString() {
         return string;
     }
-    
-    @SuppressWarnings("unused")
-    private String returnString(String retVal) {
-        return retVal;
+
+    public Long getNumber() {
+        return number;
+    }
+
+    public String getString() {
+        return string;
     }
 }

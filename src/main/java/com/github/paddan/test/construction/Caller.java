@@ -37,6 +37,18 @@ public final class Caller {
     private Caller() {
     }
 
+    /**
+     * Constructs an object from the specified class.
+     *
+     * @param clazz Type of object to create
+     * @param args Any arguments required by the constructor
+     *
+     * @return The newly created object
+     * @throws NoSuchMethodException
+     * @throws InstantiationException
+     * @throws IllegalAccessException
+     * @throws InvocationTargetException
+     */
     public static <T> T construct(Class<? extends T> clazz, Object... args)
         throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
