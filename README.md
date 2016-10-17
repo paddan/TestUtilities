@@ -43,12 +43,28 @@ dependencies {
 
 ## Usage of Injector
 
-Inject a string into a target object that has a annotated field:
+### Automatic injection of mocks
+
+Automatically inject objects in all fields that's created by the supplied function. It can be a mock function like mockitos mock() or any other function that takes a class as argument and returns a object.
+
+Automatically inject mocks into a target object using mockito
+```
+Map<String, Object> mocks = Injector.autoInject(Mockito::mock, target);
+```
+ 
+Automatically inject mocks into a target object using spock
+```
+def mocks = Injector.autoInject({Mock(it)}, target)
+```
+
+### Specific field injection
+
+Inject a string into a target object that has an annotated field:
 ```
 Injector.inject("hello", target, Inject.class);
 ```
 
-Or using the builder to inject a string into a target object that has a annotated field:
+Or using the builder to inject a string into a target object that has an annotated field:
 ```
 Injector.inject("hello").into(target).with(Inject.class);
 ```

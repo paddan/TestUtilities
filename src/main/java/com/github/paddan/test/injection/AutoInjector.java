@@ -63,10 +63,10 @@ public final class AutoInjector {
     }
 
     /**
-     * Automatically create and inject mocks based on annotations and names.
+     * Automatically create and autoInject mocks based on annotations and names.
      * Annotations work for both fields and methods, names work only for fields.
      *
-     * @param target           The instance to inject into
+     * @param target           The instance to autoInject into
      * @param injectionTargets A list of annotations used for injection (e.g EJB.class,
      *                         Inject.class) and names of specific fields.
      * @return A Mocks instance from which you can get the mocks that are
@@ -74,7 +74,7 @@ public final class AutoInjector {
      */
     public static Mocks autoMock(Object target, Object... injectionTargets) throws IllegalAccessException, InvocationTargetException {
         if (injectionTargets.length == 0) {
-            throw new IllegalArgumentException("Needs at least one annotation to use as inject targets");
+            throw new IllegalArgumentException("Needs at least one annotation to use as autoInject targets");
         }
 
         Map<Class<?>, Object> typeMocks = new HashMap<Class<?>, Object>();

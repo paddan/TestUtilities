@@ -3,8 +3,10 @@ package com.github.paddan.test.injection
 import com.github.paddan.test.annotations.MyFirstAnnotation
 import com.github.paddan.test.injection.test_classes.ClassToInject
 import com.github.paddan.test.injection.test_classes.InjectTarget
+import org.mockito.Mockito
 import spock.lang.Specification
 
+import static com.github.paddan.test.injection.Injector.autoInject
 import static com.github.paddan.test.injection.Injector.inject
 
 class InjectorTest extends Specification {
@@ -92,5 +94,41 @@ class InjectorTest extends Specification {
 
         then:
         target.intField == 10
+    }
+
+    def "Should mock all fields with mockito"() {
+        when:
+        def mocks = autoInject(Mockito.&mock, target)
+
+        then:
+        mocks.size() == 5
+        target.superSuperDummy == mocks."superSuperDummy"
+        target.namedField == mocks."namedField"
+        target.superAnnotatedField == mocks."superAnnotatedField"
+        target.annotatedField == mocks."annotatedField"
+        target.superNamedField == mocks."superNamedField"
+        ClassToInject.isAssignableFrom(mocks."superSuperDummy".class)
+        ClassToInject.isAssignableFrom(mocks."namedField".class)
+        ClassToInject.isAssignableFrom(mocks."superAnnotatedField".class)
+        ClassToInject.isAssignableFrom(mocks."annotatedField".class)
+        ClassToInject.isAssignableFrom(mocks."superNamedField".class)
+    }
+
+    def "Should mock all fields with spock"() {
+        when:
+        def mocks = autoInject({Mock(it)}, target)
+
+        then:
+        mocks.size() == 5
+        target.superSuperDummy == mocks."superSuperDummy"
+        target.namedField == mocks."namedField"
+        target.superAnnotatedField == mocks."superAnnotatedField"
+        target.annotatedField == mocks."annotatedField"
+        target.superNamedField == mocks."superNamedField"
+        ClassToInject.isAssignableFrom(mocks."superSuperDummy".class)
+        ClassToInject.isAssignableFrom(mocks."namedField".class)
+        ClassToInject.isAssignableFrom(mocks."superAnnotatedField".class)
+        ClassToInject.isAssignableFrom(mocks."annotatedField".class)
+        ClassToInject.isAssignableFrom(mocks."superNamedField".class)
     }
 }

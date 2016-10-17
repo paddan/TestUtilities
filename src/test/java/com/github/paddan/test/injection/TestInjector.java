@@ -85,7 +85,7 @@ public class TestInjector {
     public void shouldGetAllFieldsIncludingSuperClasses() throws Exception {
         InjectTarget dummy = new InjectTarget();
         Field[] fields = getFields(dummy.getClass());
-        assertEquals(8, fields.length);
+        assertEquals(9, fields.length);
     }
 
     @Test
