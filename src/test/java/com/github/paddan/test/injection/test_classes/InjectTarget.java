@@ -41,6 +41,8 @@ public class InjectTarget extends SuperInjectTarget {
     private static String staticField = "This is static!";
 
     private final String finalField;
+
+    private int intField;
     
     public static String getStaticField() {
         return staticField;
@@ -60,5 +62,9 @@ public class InjectTarget extends SuperInjectTarget {
 
     public String getPrivateField() {
         return privateField;
+    }
+
+    public int getIntField() {
+        return intField;
     }
 }

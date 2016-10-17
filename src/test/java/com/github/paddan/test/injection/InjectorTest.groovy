@@ -85,4 +85,12 @@ class InjectorTest extends Specification {
         !target.namedField
         target.finalField == "Hello!"
     }
+
+    def "Should inject an int into the field named intField"() {
+        when:
+        inject(10, target, "intField")
+
+        then:
+        target.intField == 10
+    }
 }

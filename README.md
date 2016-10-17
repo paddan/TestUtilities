@@ -75,12 +75,12 @@ Or using the builder to read a private field by its name
 Accessor.get("privateField").from(privateClass);
 ```
 
-Read a private field by its annotation and the type
+Read a private field by its annotation and type
 ```
 Accessor.get(MyFirstAnnotation, String.class, privateClass);
 ```
 
-Or using the builder to read a private field using by its name
+Or using the builder to read a private field using by its annotation and type
 ```
 Accessor.get(MyFirstAnnotation).ofType(String).from(privateClass);
 ```
