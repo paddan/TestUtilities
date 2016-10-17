@@ -26,7 +26,7 @@ public class InjectTarget extends SuperInjectTarget {
 <dependency>
   <groupId>com.github.paddan</groupId>
   <artifactId>TestUtilities</artifactId>
-  <version>1.1</version>
+  <version>1.2</version>
 </dependency>
 ```
 
@@ -37,7 +37,7 @@ repositories {
 }
 
 dependencies {
-    testCompile 'com.github.paddan:TestUtilities:1.1'
+    testCompile 'com.github.paddan:TestUtilities:1.2'
 }
 ```
 
