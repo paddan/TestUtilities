@@ -34,6 +34,9 @@ public class InjectTarget extends SuperInjectTarget {
     private ClassToInject annotatedField;
 
     private ClassToInject namedField;
+
+    @MyFirstAnnotation
+    private String privateField = "This is private!";
     
     private static String staticField = "This is static!";
 
@@ -53,5 +56,9 @@ public class InjectTarget extends SuperInjectTarget {
 
     public ClassToInject getNamedField() {
         return namedField;
+    }
+
+    public String getPrivateField() {
+        return privateField;
     }
 }

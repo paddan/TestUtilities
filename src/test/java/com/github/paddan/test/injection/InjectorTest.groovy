@@ -16,13 +16,55 @@ class InjectorTest extends Specification {
         classToInject = Mock(ClassToInject)
     }
 
-    def "Should inject a mock object for field annotated with MyFirstAnnotation"() {
+    def "should inject with annotated builder"() {
         when:
-        inject(classToInject, ClassToInject, target, MyFirstAnnotation)
+        inject(classToInject).into(target).with(MyFirstAnnotation)
 
         then:
         !target.namedField
         target.annotatedField == classToInject
+    }
+
+    def "should inject with named builder"() {
+        when:
+        inject(classToInject).into(target).with("namedField")
+
+        then:
+        target.namedField == classToInject
+        !target.annotatedField
+    }
+
+    def "Should inject a mock object for field annotated with MyFirstAnnotation"() {
+        when:
+        inject(classToInject, target, MyFirstAnnotation)
+
+        then:
+        !target.namedField
+        target.annotatedField == classToInject
+    }
+
+    def "Should inject null for named field"() {
+        when:
+        inject(null, String.class, target, "privateField")
+
+        then:
+        !target.privateField
+    }
+
+    def "Should inject null for annotated field"() {
+        when:
+        inject(null, String, target, MyFirstAnnotation)
+
+        then:
+        !target.privateField
+    }
+
+    def "Should not inject a mock object for field annotated with MyFirstAnnotation"() {
+        when: "injecting an object of the wrong type"
+        inject(1000, target, MyFirstAnnotation)
+
+        then: "An exception should be thrown"
+        thrown IllegalArgumentException
     }
 
     def "Should inject a mock object into field named namedField"() {

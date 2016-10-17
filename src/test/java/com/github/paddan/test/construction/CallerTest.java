@@ -22,6 +22,9 @@
 
 package com.github.paddan.test.construction;
 
+import static com.github.paddan.test.construction.Caller.callMethod;
+import static com.github.paddan.test.construction.Caller.callStatic;
+import static com.github.paddan.test.construction.Caller.construct;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -30,28 +33,26 @@ import org.junit.Test;
 /**
  * @author patrik.lindefors
  */
-public class TestInvoker {
+public class CallerTest {
 
     @Test
     public void shouldInvokeNoArgsPrivateConstructor() throws Exception {
-        PrivateClass privateClass = Caller.callConstructor(PrivateClass.class);
+        PrivateClass privateClass = construct(PrivateClass.class);
         assertNotNull(privateClass);
     }
 
 
     @Test
     public void shouldInvokePrivateConstructorWithArgs() throws Exception {
-        PrivateClass privateClass = Caller.callConstructor(PrivateClass.class, new Class<?>[] {String.class, Long.class}, new Object[] {
-            "hej", new Long(10)});
+        PrivateClass privateClass = construct(PrivateClass.class, "hej", 10L);
         assertNotNull(privateClass);
     }
 
 
     @Test
     public void shouldInvokeNoArgsPrivateMethod() throws Exception {
-        PrivateClass privateClass = Caller.callConstructor(PrivateClass.class, new Class<?>[] {String.class, Long.class}, new Object[] {
-            "flirp", new Long(10)});
-        String retVal = (String) Caller.callMethod(privateClass, "returnString");
+        PrivateClass privateClass = construct(PrivateClass.class, "flirp", 10L);
+        String retVal = (String) callMethod(privateClass, "returnString");
 
         assertNotNull(retVal);
         assertEquals("flirp", retVal);
@@ -60,8 +61,8 @@ public class TestInvoker {
 
     @Test
     public void shouldInvokePrivateMethodWithArgs() throws Exception {
-        PrivateClass privateClass = Caller.callConstructor(PrivateClass.class);
-        String retVal = (String) Caller.callMethod(privateClass, "returnString", new Class<?>[] {String.class}, new String[] {"flopp"});
+        PrivateClass privateClass = construct(PrivateClass.class);
+        String retVal = (String) callMethod(privateClass, "returnString", "flopp");
 
         assertNotNull(retVal);
         assertEquals("flopp", retVal);
@@ -71,7 +72,7 @@ public class TestInvoker {
 
     @Test
     public void shouldInvokeNoArgsPrivateStaticMethod() throws Exception {
-        String retVal = (String) Caller.callMethod(PrivateClass.class, "returnStringFromStatic");
+        String retVal = (String) callStatic(PrivateClass.class, "returnStringFromStatic");
 
         assertNotNull(retVal);
         assertEquals("hej", retVal);
@@ -80,8 +81,7 @@ public class TestInvoker {
 
     @Test
     public void shouldInvokePrivateStaticMethodWithArgs() throws Exception {
-        String retVal = (String) Caller.callMethod(PrivateClass.class, "returnStringFromStatic", new Class<?>[] {String.class},
-            new String[] {"flipp"});
+        String retVal = (String) callStatic(PrivateClass.class, "returnStringFromStatic", "flipp");
 
         assertNotNull(retVal);
         assertEquals("flipp", retVal);
@@ -90,6 +90,6 @@ public class TestInvoker {
 
     @Test(expected = IllegalArgumentException.class)
     public void shouldThrowExceptionDueToStaticModifier() throws Exception {
-        Caller.callMethod(PrivateClass.class, "returnString");
+        callMethod(PrivateClass.class, "returnString");
     }
 }

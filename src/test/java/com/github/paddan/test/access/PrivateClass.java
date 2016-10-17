@@ -22,8 +22,14 @@
 
 package com.github.paddan.test.access;
 
+import com.github.paddan.test.annotations.MyFirstAnnotation;
+
 public class PrivateClass {
 
     @SuppressWarnings("unused")
     private String privateField = "this is private";
+
+    @SuppressWarnings("unused")
+    @MyFirstAnnotation
+    private String annotatedField = "This is annotated!";
 }

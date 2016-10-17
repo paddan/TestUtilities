@@ -25,53 +25,59 @@ package com.github.paddan.test.construction;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- *
  * @author patrik.lindefors
- *
  */
 public final class Caller {
 
     private Caller() {
     }
 
-    public static <T> T callConstructor(Class<? extends T> clazz) throws NoSuchMethodException, InstantiationException,
-        InvocationTargetException, IllegalAccessException {
-        return callConstructor(clazz, null, null);
-    }
-
-    public static <T> T callConstructor(Class<? extends T> clazz, Class<?>[] types, Object[] args)
+    public static <T> T construct(Class<? extends T> clazz, Object... args)
         throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
-        Constructor<? extends T> constructor = clazz.getDeclaredConstructor(types);
+
+        Constructor<? extends T> constructor;
+        if (args != null) {
+            List<Class<?>> types = Arrays.stream(args).map(Object::getClass).collect(Collectors.<Class<?>>toList());
+            constructor = clazz.getDeclaredConstructor(types.toArray(new Class[0]));
+        } else {
+            constructor = clazz.getDeclaredConstructor((Class<?>[]) null);
+        }
+
         constructor.setAccessible(true);
 
         return constructor.newInstance(args);
     }
 
-    public static Object callMethod(Class<?> invokeOn, String name) throws NoSuchMethodException, IllegalAccessException,
-        InvocationTargetException {
-        return callMethod(invokeOn, name, null, null);
-    }
-
-    public static Object callMethod(Class<?> invokeOn, String name, Class<?>[] types, Object[] args)
+    public static Object callStatic(Class<?> invokeOn, String name, Object... args)
         throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+
+        Class<?>[] types = null;
+        if (args != null) {
+            types = Arrays.stream(args).map(Object::getClass).collect(Collectors.<Class<?>>toList()).toArray(new Class[0]);
+        }
+
         Method method = getMethod(name, types, invokeOn);
 
         method.setAccessible(true);
         return method.invoke(invokeOn, args);
     }
 
-    public static Object callMethod(Object invokeOn, String name) throws NoSuchMethodException, IllegalAccessException,
-        InvocationTargetException {
-        return callMethod(invokeOn, name, null, null);
-    }
-
-    public static Object callMethod(Object invokeOn, String name, Class<?>[] types, Object[] args)
+    public static Object callMethod(Object invokeOn, String name, Object... args)
         throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+
+        Class<?>[] types = null;
+        if (args != null) {
+            types = Arrays.stream(args).map(Object::getClass).collect(Collectors.<Class<?>>toList()).toArray(new Class[0]);
+        }
 
         Method method = getMethod(name, types, invokeOn.getClass());
         method.setAccessible(true);
+
         return method.invoke(invokeOn, args);
     }
 
@@ -82,8 +88,7 @@ public final class Caller {
         while (method == null) {
             try {
                 method = classType.getDeclaredMethod(name, types);
-            }
-            catch (NoSuchMethodException e) {
+            } catch (NoSuchMethodException e) {
                 classType = classType.getSuperclass();
                 if (classType == Object.class) {
                     throw new IllegalArgumentException("Couldn't find method " + name, e);
