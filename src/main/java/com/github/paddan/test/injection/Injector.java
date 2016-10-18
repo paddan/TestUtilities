@@ -42,6 +42,7 @@ public final class Injector {
 
   private Object value;
   private Object target;
+  private Class classTarget;
 
   private Injector() {
   }
@@ -71,8 +72,7 @@ public final class Injector {
         Object mockedObject = mock.apply(field.getType());
         mocks.put(field.getName(), mockedObject);
         setField(mockedObject, into, field);
-      }
-      catch (Exception e) {
+      } catch (Exception e) {
         // Intended to be empty
       }
     }
@@ -176,7 +176,8 @@ public final class Injector {
         return value;
       }
     }
-    throw new IllegalArgumentException("Couldn't autoInject a " + value.getClass().getName() + " into "
+
+    throw new IllegalArgumentException("Couldn't autoInject a " + (value == null ? "a null value" : value.getClass().getName()) + " into "
         + into.getClass().getName() + " using field " + name);
   }
 
@@ -206,12 +207,16 @@ public final class Injector {
    * @throws IllegalAccessException If the field cannot be accessed
    * @throws NoSuchFieldException   If the field doesn't exist with the specified type and annotation
    */
-  public static <T> T inject(T value, Class<?> into, String name)
+  public static <T> T inject(T value, Class into, String name)
       throws IllegalAccessException, NoSuchFieldException {
+    return injectIntoStatic(value, into, name);
+  }
+
+  private static <T> T injectIntoStatic(T value, Class into, String name) throws IllegalAccessException, NoSuchFieldException {
     Field[] fields = getFields(into);
 
     for (Field field : fields) {
-      if (field.getName().equals(name) && field.getType().isAssignableFrom(value.getClass())) {
+      if (field.getName().equals(name) && (value == null || field.getType().isAssignableFrom(value.getClass()))) {
         setField(value, into, field);
         return value;
       }
@@ -229,11 +234,21 @@ public final class Injector {
     return this;
   }
 
+  public Injector into(Class target) {
+    this.classTarget = target;
+    return this;
+  }
+
   public Object with(Class<? extends Annotation> annotation) throws NoSuchFieldException, IllegalAccessException {
-    return inject(value, target, annotation);
+    return inject(value, target == null ? classTarget : target, annotation);
   }
 
   public Object with(String name) throws NoSuchFieldException, IllegalAccessException {
-    return inject(value, target, name);
+    if (target != null) {
+      return inject(value, target, name);
+    }
+    else {
+      return injectIntoStatic(value, classTarget, name);
+    }
   }
 }

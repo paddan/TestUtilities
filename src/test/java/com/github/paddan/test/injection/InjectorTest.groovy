@@ -3,6 +3,7 @@ package com.github.paddan.test.injection
 import com.github.paddan.test.annotations.MyFirstAnnotation
 import com.github.paddan.test.injection.test_classes.ClassToInject
 import com.github.paddan.test.injection.test_classes.InjectTarget
+import org.mockito.InjectMocks
 import org.mockito.Mockito
 import spock.lang.Specification
 
@@ -130,5 +131,105 @@ class InjectorTest extends Specification {
         ClassToInject.isAssignableFrom(mocks."superAnnotatedField".class)
         ClassToInject.isAssignableFrom(mocks."annotatedField".class)
         ClassToInject.isAssignableFrom(mocks."superNamedField".class)
+    }
+
+    def "Should inject null into static field"() {
+        when:
+        inject(null, InjectTarget, "staticField")
+
+        then:
+        !InjectTarget.staticField
+        !(new InjectTarget()).staticField
+    }
+
+    def "Should inject null into static field using builder"() {
+        when:
+        inject(null).into(InjectTarget).with("staticField")
+
+        then:
+        !InjectTarget.staticField
+        !(new InjectTarget()).staticField
+    }
+
+    def "Should inject value into static field"() {
+        when:
+        inject("Hello!", InjectTarget, "staticField")
+
+        then:
+        InjectTarget.staticField == "Hello!"
+        (new InjectTarget()).staticField == "Hello!"
+    }
+
+    def "Should inject value into static field using builder"() {
+        when:
+        inject("Hello!").into(InjectTarget).with("staticField")
+
+        then:
+        InjectTarget.staticField == "Hello!"
+        (new InjectTarget()).staticField == "Hello!"
+    }
+
+    def "Should throw exception when field name is incorrect in target object"() {
+        when:
+        inject("Hello!", target, "invalid name")
+
+        then:
+        thrown IllegalArgumentException
+    }
+
+    def "Should throw exception when field name is incorrect in target class"() {
+        when:
+        inject("Hello!", InjectTarget, "invalid name")
+
+        then:
+        thrown IllegalArgumentException
+    }
+
+    def "Should throw exception when field name is incorrect in target object with builder"() {
+        when:
+        inject("Hello!").into(target).with("invalid name")
+
+        then:
+        thrown IllegalArgumentException
+    }
+
+    def "Should throw exception when field name is incorrect in target class with builder"() {
+        when:
+        inject("Hello!").into(InjectTarget).with("invalid name")
+
+        then:
+        thrown IllegalArgumentException
+    }
+
+    def "Should throw exception when field annotation is incorrect in target object"() {
+        when:
+        inject("Hello!", target, InjectMocks)
+
+        then:
+        thrown IllegalArgumentException
+    }
+
+    def "Should throw exception when field annotation is incorrect in target class"() {
+        when:
+        inject("Hello!", InjectTarget, InjectMocks)
+
+        then:
+        thrown IllegalArgumentException
+    }
+
+    def "Should throw exception when field annotation is incorrect in target object with builder"() {
+        when:
+        inject("Hello!").into(target).with(InjectMocks)
+
+        then:
+        thrown IllegalArgumentException
+    }
+
+    def "Should throw exception when field annotation is incorrect in target class with builder"() {
+        when:
+        inject("Hello!").into(InjectTarget).with(InjectMocks)
+
+        then:
+        thrown IllegalArgumentException
     }
 }
