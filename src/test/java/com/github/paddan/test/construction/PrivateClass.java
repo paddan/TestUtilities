@@ -32,10 +32,12 @@ public final class PrivateClass {
     private String string;
     private Long number;
 
+    @SuppressWarnings("unused")
     private PrivateClass() {
         
     }
-    
+
+    @SuppressWarnings("unused")
     private PrivateClass(String string, Long number) {
         this.string = string;
         this.number = number;

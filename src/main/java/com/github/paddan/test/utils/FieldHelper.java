@@ -34,7 +34,7 @@ public final class FieldHelper {
         Class<?> superClass = thisClass.getSuperclass();
 
         if (superClass != Object.class) {
-            List<Field> superClassFields = new LinkedList<Field>(Arrays.asList(getFields(superClass)));
+            List<Field> superClassFields = new LinkedList<>(Arrays.asList(getFields(superClass)));
             superClassFields.addAll(Arrays.asList(fields));
             return superClassFields.toArray(new Field[superClassFields.size()]);
         }
