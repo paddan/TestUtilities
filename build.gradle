@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 
 group = 'com.github.paddan'
-version = '1.0'
+version = '1.4'
 
 description = """TestUtilities"""
 
@@ -11,6 +11,6 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.mockito', name: 'mockito-all', version:'1.8.5'
+    compile group: 'org.mockito', name: 'mockito-core', version:'2.10.0'
     testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
 }
