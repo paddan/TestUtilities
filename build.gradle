@@ -1,16 +1,24 @@
-apply plugin: 'java'
-apply plugin: 'maven'
+plugins {
+    id 'java'
+    id 'maven'
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    maven {
+        url = 'http://repo.maven.apache.org/maven2'
+    }
+}
 
 group = 'com.github.paddan'
 version = '1.4'
 
 description = """TestUtilities"""
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    compile group: 'org.mockito', name: 'mockito-core', version:'2.10.0'
-    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+    compile group: 'org.mockito', name: 'mockito-core', version:'3.0.0'
+    testCompile "org.spockframework:spock-core:1.3-groovy-2.5"
 }
