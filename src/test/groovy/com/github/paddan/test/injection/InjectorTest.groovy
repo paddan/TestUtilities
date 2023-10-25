@@ -48,7 +48,7 @@ class InjectorTest extends Specification {
 
     def "Should inject null for named field"() {
         when:
-        inject(null, String.class, target, "privateField")
+        inject(null, target, "privateField")
 
         then:
         !target.privateField
@@ -72,7 +72,7 @@ class InjectorTest extends Specification {
 
     def "Should inject a mock object into field named namedField"() {
         when:
-        inject(classToInject, ClassToInject, target, "namedField")
+        inject(classToInject, target, "namedField")
 
         then:
         !target.annotatedField
@@ -81,7 +81,7 @@ class InjectorTest extends Specification {
 
     def "Should inject a string object into the final field named finalField"() {
         when:
-        inject("Hello!", String, target, "finalField")
+        inject("Hello!", target, "finalField")
 
         then:
         !target.annotatedField
@@ -108,11 +108,6 @@ class InjectorTest extends Specification {
         target.superAnnotatedField == mocks."superAnnotatedField"
         target.annotatedField == mocks."annotatedField"
         target.superNamedField == mocks."superNamedField"
-        ClassToInject.isAssignableFrom(mocks."superSuperDummy".class)
-        ClassToInject.isAssignableFrom(mocks."namedField".class)
-        ClassToInject.isAssignableFrom(mocks."superAnnotatedField".class)
-        ClassToInject.isAssignableFrom(mocks."annotatedField".class)
-        ClassToInject.isAssignableFrom(mocks."superNamedField".class)
     }
 
     def "Should mock all fields with spock"() {
@@ -126,11 +121,6 @@ class InjectorTest extends Specification {
         target.superAnnotatedField == mocks."superAnnotatedField"
         target.annotatedField == mocks."annotatedField"
         target.superNamedField == mocks."superNamedField"
-        ClassToInject.isAssignableFrom(mocks."superSuperDummy".class)
-        ClassToInject.isAssignableFrom(mocks."namedField".class)
-        ClassToInject.isAssignableFrom(mocks."superAnnotatedField".class)
-        ClassToInject.isAssignableFrom(mocks."annotatedField".class)
-        ClassToInject.isAssignableFrom(mocks."superNamedField".class)
     }
 
     def "Should inject null into static field"() {

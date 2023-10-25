@@ -5,9 +5,6 @@ import spock.lang.Specification
 
 import static com.github.paddan.test.access.Accessor.get
 
-/**
- * Created by patrik.lindefors on 2016-10-17.
- */
 class AccessorTest extends Specification {
     def "Should retrieve a private field"() {
         setup:

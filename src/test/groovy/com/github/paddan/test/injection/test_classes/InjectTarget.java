@@ -20,59 +20,51 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.github.paddan.test.construction;
+package com.github.paddan.test.injection.test_classes;
 
-/**
- * 
- * @author patrik.lindefors
- *
- */
-public final class PrivateClass {
+import com.github.paddan.test.annotations.MyFirstAnnotation;
+
+public class InjectTarget extends SuperInjectTarget {
+
+    public InjectTarget() {
+        finalField = "This is final!";
+    }
+
+    @MyFirstAnnotation
+    private ClassToInject annotatedField;
+
+    private ClassToInject namedField;
+
+    @MyFirstAnnotation
+    private String privateField = "This is private!";
     
-    private String string;
-    private Long number;
+    private static String staticField = "This is private and static!";
 
-    @SuppressWarnings("unused")
-    private PrivateClass() {
-        
-    }
+    private final String finalField;
 
-    @SuppressWarnings("unused")
-    private PrivateClass(String string, Long number) {
-        this.string = string;
-        this.number = number;
-    }
-
-    @SuppressWarnings("unused")
-    private static String returnStringFromStatic() {
-        return "hej";
-    }
+    private int intField;
     
-    @SuppressWarnings("unused")
-    private static String returnStringFromStatic(String retVal) {
-        return retVal;
+    public static String getStaticField() {
+        return staticField;
     }
 
-    @SuppressWarnings("unused")
-    private String returnStringFromPrivate() {
-        return "hej";
+    public String getFinalField() {
+        return finalField;
     }
 
-    @SuppressWarnings("unused")
-    private String returnStringFromPrivate(String retVal) {
-        return retVal;
+    public ClassToInject getAnnotatedField() {
+        return annotatedField;
     }
 
-    @SuppressWarnings("unused")
-    private String getPrivateString() {
-        return string;
+    public ClassToInject getNamedField() {
+        return namedField;
     }
 
-    public Long getNumber() {
-        return number;
+    public String getPrivateField() {
+        return privateField;
     }
 
-    public String getString() {
-        return string;
+    public int getIntField() {
+        return intField;
     }
 }

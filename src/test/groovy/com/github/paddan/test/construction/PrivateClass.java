@@ -20,51 +20,54 @@
 //    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 //    SOFTWARE.
 
-package com.github.paddan.test.injection.test_classes;
+package com.github.paddan.test.construction;
 
-import com.github.paddan.test.annotations.MyFirstAnnotation;
+public final class PrivateClass {
 
-public class InjectTarget extends SuperInjectTarget {
+    private String string;
+    private Long number;
 
-    public InjectTarget() {
-        finalField = "This is final!";
+    @SuppressWarnings("unused")
+    private PrivateClass() {
+
     }
 
-    @MyFirstAnnotation
-    private ClassToInject annotatedField;
-
-    private ClassToInject namedField;
-
-    @MyFirstAnnotation
-    private String privateField = "This is private!";
-    
-    private static String staticField = "This is static!";
-
-    private final String finalField;
-
-    private int intField;
-    
-    public static String getStaticField() {
-        return staticField;
+    @SuppressWarnings("unused")
+    private PrivateClass(String string, Long number) {
+        this.string = string;
+        this.number = number;
     }
 
-    public String getFinalField() {
-        return finalField;
+    @SuppressWarnings("unused")
+    private static String returnStringFromStatic() {
+        return "hej";
     }
 
-    public ClassToInject getAnnotatedField() {
-        return annotatedField;
+    @SuppressWarnings("unused")
+    private static String returnStringFromStatic(String retVal) {
+        return retVal;
     }
 
-    public ClassToInject getNamedField() {
-        return namedField;
+    @SuppressWarnings("unused")
+    private String returnStringFromPrivate() {
+        return "hej";
     }
 
-    public String getPrivateField() {
-        return privateField;
+    @SuppressWarnings("unused")
+    private String returnStringFromPrivate(String retVal) {
+        return retVal;
     }
 
-    public int getIntField() {
-        return intField;
+    @SuppressWarnings("unused")
+    private String getPrivateString() {
+        return string;
+    }
+
+    public Long getNumber() {
+        return number;
+    }
+
+    public String getString() {
+        return string;
     }
 }

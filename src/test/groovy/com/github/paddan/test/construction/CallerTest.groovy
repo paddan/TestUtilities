@@ -6,9 +6,6 @@ import static com.github.paddan.test.construction.Caller.callMethod
 import static com.github.paddan.test.construction.Caller.callStatic
 import static com.github.paddan.test.construction.Caller.construct
 
-/**
- * Created by patrik.lindefors on 2016-10-17.
- */
 class CallerTest extends Specification {
 
     def "Should create object from no-args constructor"() {
