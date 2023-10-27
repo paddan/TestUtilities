@@ -29,6 +29,9 @@ import java.util.List;
 
 public final class FieldHelper {
 
+    private FieldHelper() {
+    }
+
     public static Field[] getFields(Class<?> thisClass) {
         Field[] fields = thisClass.getDeclaredFields();
         Class<?> superClass = thisClass.getSuperclass();
@@ -36,12 +39,9 @@ public final class FieldHelper {
         if (superClass != Object.class) {
             List<Field> superClassFields = new LinkedList<>(Arrays.asList(getFields(superClass)));
             superClassFields.addAll(Arrays.asList(fields));
-            return superClassFields.toArray(new Field[superClassFields.size()]);
+            return superClassFields.toArray(new Field[0]);
         }
 
         return fields;
-    }
-
-    private FieldHelper() {
     }
 }

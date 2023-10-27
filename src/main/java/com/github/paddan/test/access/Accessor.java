@@ -22,10 +22,10 @@
 
 package com.github.paddan.test.access;
 
-import static com.github.paddan.test.utils.FieldHelper.getFields;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+
+import static com.github.paddan.test.utils.FieldHelper.getFields;
 
 public final class Accessor {
     private String namedField;
@@ -68,7 +68,7 @@ public final class Accessor {
     }
 
     public static Object get(Class<? extends Annotation> annotation, Class type, Object from) throws
-        IllegalAccessException {
+            IllegalAccessException {
 
         Field[] fields = getFields(from.getClass());
         for (Field field : fields) {
@@ -89,11 +89,9 @@ public final class Accessor {
     public Object from(Object from) throws IllegalAccessException {
         if (namedField != null) {
             return get(namedField, from);
-        }
-        else if (annotation != null && type != null) {
+        } else if (annotation != null && type != null) {
             return get(annotation, type, from);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Couldn't find field! Missing information!");
         }
     }

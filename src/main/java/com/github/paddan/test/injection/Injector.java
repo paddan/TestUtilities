@@ -22,13 +22,13 @@
 
 package com.github.paddan.test.injection;
 
-import static com.github.paddan.test.utils.FieldHelper.getFields;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+
+import static com.github.paddan.test.utils.FieldHelper.getFields;
 
 /**
  * @author patrik.lindefors
@@ -177,6 +177,11 @@ public final class Injector {
                         + " using field " + name);
     }
 
+    private static <T> void setField(T value, Object into, Field field) throws IllegalAccessException {
+        field.setAccessible(true);
+        field.set(into, value);
+    }
+
     public void setValue(Object value) {
         this.value = value;
     }
@@ -201,10 +206,5 @@ public final class Injector {
         } else {
             return injectIntoStatic(value, classTarget, name);
         }
-    }
-
-    private static <T> void setField(T value, Object into, Field field) throws IllegalAccessException {
-        field.setAccessible(true);
-        field.set(into, value);
     }
 }

@@ -26,8 +26,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * @author patrik.lindefors
@@ -41,21 +39,15 @@ public final class Caller {
      * Constructs an object from the specified class.
      *
      * @param clazz Type of object to create
-     * @param args Any arguments required by the constructor
-     *
+     * @param args  Any arguments required by the constructor
      * @return The newly created object
-     * @throws NoSuchMethodException
-     * @throws InstantiationException
-     * @throws IllegalAccessException
-     * @throws InvocationTargetException
      */
     public static <T> T construct(Class<? extends T> clazz, Object... args)
-        throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
         Constructor<? extends T> constructor;
         if (args != null) {
-            List<Class<?>> types = Arrays.stream(args).map(Object::getClass).collect(Collectors.<Class<?>>toList());
-            constructor = clazz.getDeclaredConstructor(types.toArray(new Class[0]));
+            constructor = clazz.getDeclaredConstructor(Arrays.stream(args).map(Object::getClass).toArray(Class[]::new));
         } else {
             constructor = clazz.getDeclaredConstructor((Class<?>[]) null);
         }
@@ -66,11 +58,11 @@ public final class Caller {
     }
 
     public static Object callStatic(Class<?> invokeOn, String name, Object... args)
-        throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException {
 
         Class<?>[] types = null;
         if (args != null) {
-            types = Arrays.stream(args).map(Object::getClass).collect(Collectors.<Class<?>>toList()).toArray(new Class[0]);
+            types = Arrays.stream(args).map(Object::getClass).toArray(Class[]::new);
         }
 
         Method method = getMethod(name, types, invokeOn);
@@ -80,11 +72,11 @@ public final class Caller {
     }
 
     public static Object callMethod(Object invokeOn, String name, Object... args)
-        throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
+            throws IllegalAccessException, InvocationTargetException {
 
         Class<?>[] types = null;
         if (args != null) {
-            types = Arrays.stream(args).map(Object::getClass).collect(Collectors.<Class<?>>toList()).toArray(new Class[0]);
+            types = Arrays.stream(args).map(Object::getClass).toArray(Class[]::new);
         }
 
         Method method = getMethod(name, types, invokeOn.getClass());
