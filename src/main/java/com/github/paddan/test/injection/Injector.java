@@ -191,7 +191,7 @@ public final class Injector {
         return this;
     }
 
-    public Injector into(Class target) {
+    public Injector into(Class<?> target) {
         this.classTarget = target;
         return this;
     }

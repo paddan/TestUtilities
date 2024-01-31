@@ -30,7 +30,7 @@ import static com.github.paddan.test.utils.FieldHelper.getFields;
 public final class Accessor {
     private String namedField;
     private Class<? extends Annotation> annotation;
-    private Class type;
+    private Class<?> type;
 
     private Accessor() {
     }
@@ -67,7 +67,7 @@ public final class Accessor {
         return privateField.get(from);
     }
 
-    public static Object get(Class<? extends Annotation> annotation, Class type, Object from) throws
+    public static Object get(Class<? extends Annotation> annotation, Class<?> type, Object from) throws
             IllegalAccessException {
 
         Field[] fields = getFields(from.getClass());
@@ -100,7 +100,7 @@ public final class Accessor {
         this.annotation = annotation;
     }
 
-    public Accessor ofType(Class type) {
+    public Accessor ofType(Class<?> type) {
         this.type = type;
         return this;
     }
