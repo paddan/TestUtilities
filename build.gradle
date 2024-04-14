@@ -4,7 +4,8 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 repositories {
@@ -12,15 +13,10 @@ repositories {
     mavenCentral()
 }
 
-group = 'com.github.paddan'
-version = '1.5'
-
-description = """TestUtilities"""
-
 dependencies {
-    testImplementation 'org.mockito:mockito-core:5.6.0'
-    testImplementation 'org.spockframework:spock-core:2.4-M1-groovy-4.0'
-    testImplementation platform('org.spockframework:spock-bom:2.4-M1-groovy-4.0')
+    testImplementation 'org.mockito:mockito-core:5.7.0'
+    testImplementation 'org.spockframework:spock-core:2.4-M4-groovy-4.0'
+    testImplementation platform('org.spockframework:spock-bom:2.4-M4-groovy-4.0')
 }
 
 test {
