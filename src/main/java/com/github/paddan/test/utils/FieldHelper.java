@@ -27,11 +27,23 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Provides utility methods for working with Java reflection and class fields.
+ *
+ * The {@link #getFields(Class)} method retrieves all fields, including those from
+ * superclasses, for the given class.
+ */
 public final class FieldHelper {
 
     private FieldHelper() {
     }
 
+    /**
+     * Retrieves all fields, including those from superclasses, for the given class.
+     *
+     * @param thisClass the class to get the fields for
+     * @return an array of all fields, including those from superclasses, for the given class
+     */
     public static Field[] getFields(Class<?> thisClass) {
         Field[] fields = thisClass.getDeclaredFields();
         Class<?> superClass = thisClass.getSuperclass();

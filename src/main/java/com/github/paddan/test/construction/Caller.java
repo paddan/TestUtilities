@@ -28,6 +28,12 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 /**
+ * Provides utility methods for constructing objects and invoking methods using reflection.
+ * <p>
+ * The {@link #construct(Class, Object...)} method allows creating an instance of a class with the specified constructor arguments.
+ * The {@link #callStatic(Class, String, Object...)} method allows invoking a static method on a class with the specified arguments.
+ * The {@link #callMethod(Object, String, Object...)} method allows invoking an instance method on an object with the specified arguments.
+ *
  * @author patrik.lindefors
  */
 public final class Caller {
@@ -57,6 +63,16 @@ public final class Caller {
         return constructor.newInstance(args);
     }
 
+    /**
+     * Invokes the specified static method on the given class with the provided arguments.
+     *
+     * @param invokeOn The class on which to invoke the method.
+     * @param name The name of the method to invoke.
+     * @param args The arguments to pass to the method.
+     * @return The result of invoking the method.
+     * @throws IllegalAccessException If the method cannot be accessed.
+     * @throws InvocationTargetException If the method throws an exception.
+     */
     public static Object callStatic(Class<?> invokeOn, String name, Object... args)
             throws IllegalAccessException, InvocationTargetException {
 
@@ -71,6 +87,16 @@ public final class Caller {
         return method.invoke(invokeOn, args);
     }
 
+    /**
+     * Invokes the specified method on the given object with the provided arguments.
+     *
+     * @param invokeOn The object on which to invoke the method.
+     * @param name The name of the method to invoke.
+     * @param args The arguments to pass to the method.
+     * @return The result of invoking the method.
+     * @throws IllegalAccessException If the method cannot be accessed.
+     * @throws InvocationTargetException If the method throws an exception.
+     */
     public static Object callMethod(Object invokeOn, String name, Object... args)
             throws IllegalAccessException, InvocationTargetException {
 

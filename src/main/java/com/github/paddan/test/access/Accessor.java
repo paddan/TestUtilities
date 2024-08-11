@@ -27,6 +27,15 @@ import java.lang.reflect.Field;
 
 import static com.github.paddan.test.utils.FieldHelper.getFields;
 
+/**
+ * The `Accessor` class provides a convenient way to access private fields of an object using reflection.
+ * It supports two modes of operation:
+ * 1. Accessing a field by name
+ * 2. Accessing a field annotated with a specific annotation and of a specific type
+ *
+ * The class provides static factory methods to create `Accessor` instances, and an `from()` method to
+ * retrieve the value of the specified field from the given object.
+ */
 public final class Accessor {
     private String namedField;
     private Class<? extends Annotation> annotation;
@@ -35,18 +44,38 @@ public final class Accessor {
     private Accessor() {
     }
 
+    /**
+     * Creates a new `Accessor` instance and sets the named field to be accessed.
+     *
+     * @param namedField the name of the field to be accessed
+     * @return a new `Accessor` instance with the named field set
+     */
     public static Accessor get(String namedField) {
         Accessor accessor = new Accessor();
         accessor.setNamedField(namedField);
         return accessor;
     }
 
+    /**
+     * Creates a new `Accessor` instance and sets the annotation to be used for field lookup.
+     *
+     * @param annotation the annotation type to be used for field lookup
+     * @return a new `Accessor` instance with the annotation set
+     */
     public static Accessor get(Class<? extends Annotation> annotation) {
         Accessor accessor = new Accessor();
         accessor.setAnnotation(annotation);
         return accessor;
     }
 
+    /**
+     * Retrieves the value of the specified private field from the given object.
+     *
+     * @param field the name of the private field to retrieve
+     * @param from the object containing the private field
+     * @return the value of the private field
+     * @throws IllegalAccessException if the private field cannot be accessed
+     */
     public static Object get(String field, Object from) throws IllegalAccessException {
         Field privateField = null;
         Class<?> type = from.getClass();
@@ -67,6 +96,16 @@ public final class Accessor {
         return privateField.get(from);
     }
 
+    /**
+     * Retrieves the value of the first field annotated with the specified annotation and of the given type from the provided object.
+     *
+     * @param annotation the annotation type to search for on the fields
+     * @param type the type of the field to search for
+     * @param from the object to retrieve the field value from
+     * @return the value of the annotated field
+     * @throws IllegalAccessException if the field cannot be accessed
+     * @throws IllegalArgumentException if no field matching the criteria is found
+     */
     public static Object get(Class<? extends Annotation> annotation, Class<?> type, Object from) throws
             IllegalAccessException {
 
@@ -86,6 +125,18 @@ public final class Accessor {
         this.namedField = namedField;
     }
 
+    /**
+     * Retrieves the value of a field from the provided object based on the specified criteria.
+     *
+     * If a named field has been set using {@link #setNamedField(String)}, this method will return the value of that field.
+     * Otherwise, if an annotation type and field type have been set using {@link #ofType(Class)} and {@link #setAnnotation(Class)},
+     * this method will return the value of the first field annotated with the specified annotation and of the given type.
+     *
+     * @param from the object to retrieve the field value from
+     * @return the value of the field
+     * @throws IllegalAccessException if the field cannot be accessed
+     * @throws IllegalArgumentException if no field matching the criteria is found
+     */
     public Object from(Object from) throws IllegalAccessException {
         if (namedField != null) {
             return get(namedField, from);
@@ -100,6 +151,12 @@ public final class Accessor {
         this.annotation = annotation;
     }
 
+    /**
+     * Sets the type of the field to be retrieved.
+     *
+     * @param type the type of the field to be retrieved
+     * @return the current Accessor instance for method chaining
+     */
     public Accessor ofType(Class<?> type) {
         this.type = type;
         return this;
