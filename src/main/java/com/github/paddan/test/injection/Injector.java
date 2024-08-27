@@ -37,6 +37,7 @@ public final class Injector {
 
     private Object value;
     private Object target;
+    @SuppressWarnings("rawtypes")
     private Class classTarget;
 
     private Injector() {
@@ -173,7 +174,7 @@ public final class Injector {
             }
         }
         throw new IllegalArgumentException(
-                "Couldn't autoInject a " + value.getClass().getName() + " into " + into.getClass().getName()
+                "Couldn't autoInject a " + value.getClass().getName() + " into " + into.getName()
                         + " using field " + name);
     }
 

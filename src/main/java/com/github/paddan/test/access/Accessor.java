@@ -52,7 +52,7 @@ public final class Accessor {
      */
     public static Accessor get(String namedField) {
         Accessor accessor = new Accessor();
-        accessor.setNamedField(namedField);
+        accessor.namedField = namedField;
         return accessor;
     }
 
@@ -64,7 +64,7 @@ public final class Accessor {
      */
     public static Accessor get(Class<? extends Annotation> annotation) {
         Accessor accessor = new Accessor();
-        accessor.setAnnotation(annotation);
+        accessor.annotation = annotation;
         return accessor;
     }
 
@@ -121,16 +121,8 @@ public final class Accessor {
         throw new IllegalArgumentException("Couldn't find field annotated with " + annotation);
     }
 
-    private void setNamedField(String namedField) {
-        this.namedField = namedField;
-    }
-
     /**
      * Retrieves the value of a field from the provided object based on the specified criteria.
-     *
-     * If a named field has been set using {@link #setNamedField(String)}, this method will return the value of that field.
-     * Otherwise, if an annotation type and field type have been set using {@link #ofType(Class)} and {@link #setAnnotation(Class)},
-     * this method will return the value of the first field annotated with the specified annotation and of the given type.
      *
      * @param from the object to retrieve the field value from
      * @return the value of the field
@@ -145,10 +137,6 @@ public final class Accessor {
         } else {
             throw new IllegalArgumentException("Couldn't find field! Missing information!");
         }
-    }
-
-    private void setAnnotation(Class<? extends Annotation> annotation) {
-        this.annotation = annotation;
     }
 
     /**
