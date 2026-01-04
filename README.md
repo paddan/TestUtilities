@@ -6,13 +6,18 @@ thing to be aware of regarding final fields is that they can be inlined during c
 even though it is possible to change the field it won't have any effect since the previous value has already been
 inlined in every place it has been referenced.
 
-```
+```java
 public class InjectTarget extends SuperInjectTarget {
     private final String finalField = "Final!"; // This field will be inlined during compilation!
 }
 ```
 
-## Maven and gradle usage
+## Requirements
+
+- Java 21 or higher
+- Compatible with Gradle 9.x and Maven
+
+## Maven and Gradle usage
 
 ### Maven
 ```
@@ -31,13 +36,13 @@ public class InjectTarget extends SuperInjectTarget {
 ```
 
 ### Gradle
-```
+```groovy
 repositories {
     maven { url "https://jitpack.io" }
 }
 
 dependencies {
-    testCompile 'com.github.paddan:TestUtilities:1.6'
+    testImplementation 'com.github.paddan:TestUtilities:1.6'
 }
 ```
 
@@ -45,81 +50,87 @@ dependencies {
 
 ### Automatic injection of mocks
 
-Automatically inject objects in all fields that's created by the supplied function. It can be a mock function like mockitos mock() or any other function that takes a class as argument and returns a object.
+Automatically inject objects in all fields that's created by the supplied function. It can be a mock function like Mockito's mock() or any other function that takes a class as argument and returns an object.
 
-Automatically inject mocks into a target object using mockito
-```
+Automatically inject mocks into a target object using Mockito:
+```java
 Map<String, Object> mocks = Injector.autoInject(Mockito::mock, target);
 ```
- 
-Automatically inject mocks into a target object using spock
-```
+
+Automatically inject mocks into a target object using Spock:
+```groovy
 def mocks = Injector.autoInject({Mock(it)}, target)
 ```
 
 ### Specific field injection
 
 Inject a string into a target object that has an annotated field:
-```
+```java
 Injector.inject("hello", target, Inject.class);
 ```
 
 Or using the builder to inject a string into a target object that has an annotated field:
-```
+```java
 Injector.inject("hello").into(target).with(Inject.class);
 ```
 
 Inject a string into a target object using the name of the field:
-```
+```java
 Injector.inject("hello", target, "fieldName");
 ```
 
 Or using the builder to inject a string into a target object using the name of the field:
-```
+```java
 Injector.inject("hello").into(target).with("fieldName");
 ```
 
 ## Usage of Accessor
 
-Read a private field by its name
-```
+Read a private field by its name:
+```java
 Accessor.get("privateField", privateClass);
 ```
 
-Or using the builder to read a private field by its name
-```
+Or using the builder to read a private field by its name:
+```java
 Accessor.get("privateField").from(privateClass);
 ```
 
-Read a private field by its annotation and type
-```
-Accessor.get(MyFirstAnnotation, String.class, privateClass);
+Read a private field by its annotation and type:
+```java
+Accessor.get(MyFirstAnnotation.class, String.class, privateClass);
 ```
 
-Or using the builder to read a private field using by its annotation and type
-```
-Accessor.get(MyFirstAnnotation).ofType(String).from(privateClass);
+Or using the builder to read a private field by its annotation and type:
+```java
+Accessor.get(MyFirstAnnotation.class).ofType(String.class).from(privateClass);
 ```
 
 ## Usage of Caller
-Call private constructor without args
-```
+
+Call private constructor without args:
+```java
 Caller.construct(PrivateClass.class);
 ```
 
-Call private constructor with args
-```
+Call private constructor with args:
+```java
 Caller.construct(PrivateClass.class, "hello", 10L);
 ```
 
-Call private method without args
-```
+Call private method without args:
+```java
 Caller.callMethod(privateClass, "methodName");
 ```
 
-Call private method with args
-```
+Call private method with args:
+```java
 Caller.callMethod(privateClass, "methodName", "first arg", 10, 5L);
+```
+
+Call private static method:
+```java
+Caller.callStatic(PrivateClass.class, "staticMethodName", "arg1", "arg2");
 ```
 ***
 # Disclaimer
