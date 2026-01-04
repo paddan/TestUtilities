@@ -37,8 +37,7 @@ public final class Injector {
 
     private Object value;
     private Object target;
-    @SuppressWarnings("rawtypes")
-    private Class classTarget;
+    private Class<?> classTarget;
 
     private Injector() {
     }
@@ -68,7 +67,7 @@ public final class Injector {
                 mocks.put(field.getName(), mockedObject);
                 setField(mockedObject, into, field);
             } catch (Exception e) {
-                // Intended to be empty
+                // Skip fields that cannot be mocked/injected (e.g., final types, primitives, security restrictions)
             }
         }
 
@@ -95,7 +94,7 @@ public final class Injector {
             }
         }
         throw new IllegalArgumentException(
-                "Couldn't autoInject a " + value.getClass().getName() + " into " + into.getClass().getName()
+                "Couldn't inject a " + (value != null ? value.getClass().getName() : "null value") + " into " + into.getClass().getName()
                         + " using annotation " + withAnnotationClass.getName());
     }
 
@@ -122,7 +121,7 @@ public final class Injector {
             }
         }
         throw new IllegalArgumentException(
-                "Couldn't autoInject a " + (value != null ? value.getClass().getName() : null) + " into " + into.getClass()
+                "Couldn't inject a " + (value != null ? value.getClass().getName() : "null value") + " into " + into.getClass()
                         .getName() + " using annotation " + withAnnotationClass.getName());
     }
 
@@ -147,7 +146,7 @@ public final class Injector {
         }
 
         throw new IllegalArgumentException(
-                "Couldn't autoInject a " + (value == null ? "a null value" : value.getClass().getName()) + " into " + into
+                "Couldn't inject a " + (value == null ? "null value" : value.getClass().getName()) + " into " + into
                         .getClass().getName() + " using field " + name);
     }
 
@@ -160,11 +159,11 @@ public final class Injector {
      * @return The value injected
      * @throws IllegalAccessException If the field cannot be accessed
      */
-    public static <T> T inject(T value, Class<T> into, String name) throws IllegalAccessException {
+    public static <T> T inject(T value, Class<?> into, String name) throws IllegalAccessException {
         return injectIntoStatic(value, into, name);
     }
 
-    private static <T> T injectIntoStatic(T value, Class<T> into, String name) throws IllegalAccessException {
+    private static <T> T injectIntoStatic(T value, Class<?> into, String name) throws IllegalAccessException {
         Field[] fields = getFields(into);
 
         for (Field field : fields) {
@@ -174,7 +173,7 @@ public final class Injector {
             }
         }
         throw new IllegalArgumentException(
-                "Couldn't autoInject a " + value.getClass().getName() + " into " + into.getName()
+                "Couldn't inject a " + (value != null ? value.getClass().getName() : "null value") + " into " + into.getName()
                         + " using field " + name);
     }
 

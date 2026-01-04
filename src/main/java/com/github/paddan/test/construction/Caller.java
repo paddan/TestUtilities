@@ -84,7 +84,7 @@ public final class Caller {
         Method method = getMethod(name, types, invokeOn);
 
         method.setAccessible(true);
-        return method.invoke(invokeOn, args);
+        return method.invoke(null, args);
     }
 
     /**

@@ -1,3 +1,3 @@
-java zulu-21.32.17
-gradle 8.7
-groovy 4.0.21
+java zulu-21.38.21
+gradle 9.2.1
+groovy 4.0.29
