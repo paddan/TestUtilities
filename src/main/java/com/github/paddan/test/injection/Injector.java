@@ -168,7 +168,7 @@ public final class Injector {
 
         for (Field field : fields) {
             if (field.getName().equals(name) && (value == null || field.getType().isAssignableFrom(value.getClass()))) {
-                setField(value, into, field);
+                setField(value, null, field);
                 return value;
             }
         }

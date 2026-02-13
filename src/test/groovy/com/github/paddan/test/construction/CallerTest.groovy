@@ -63,4 +63,52 @@ class CallerTest extends Specification {
         then:
         string == "Blaj"
     }
+
+    def "Should create object using primitive constructor"() {
+        when:
+        def object = construct(PrimitiveClass, 5)
+
+        then:
+        object instanceof PrimitiveClass
+        object.count == 5
+    }
+
+    def "Should call private method with primitive argument"() {
+        setup:
+        def object = construct(PrimitiveClass, 3)
+
+        when:
+        def result = callMethod(object, "echoInt", 7)
+
+        then:
+        result == 7
+    }
+
+    def "Should call private static method with primitive argument"() {
+        when:
+        def result = callStatic(PrimitiveClass, "echoStaticInt", 9)
+
+        then:
+        result == 9
+    }
+
+    def "Should construct object with null argument"() {
+        when:
+        def object = construct(NullableClass, (Object) null)
+
+        then:
+        object instanceof NullableClass
+        object.value == null
+    }
+
+    def "Should call private method with null argument"() {
+        setup:
+        def object = construct(NullableClass, (Object) null)
+
+        when:
+        def result = callMethod(object, "echo", (Object) null)
+
+        then:
+        result == null
+    }
 }

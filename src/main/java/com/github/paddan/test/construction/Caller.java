@@ -25,7 +25,6 @@ package com.github.paddan.test.construction;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 /**
  * Provides utility methods for constructing objects and invoking methods using reflection.
@@ -51,16 +50,21 @@ public final class Caller {
     public static <T> T construct(Class<? extends T> clazz, Object... args)
             throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
+        Object[] safeArgs = args == null ? new Object[0] : args;
         Constructor<? extends T> constructor;
-        if (args != null) {
-            constructor = clazz.getDeclaredConstructor(Arrays.stream(args).map(Object::getClass).toArray(Class[]::new));
+        if (args == null) {
+            try {
+                constructor = findConstructor(clazz, safeArgs);
+            } catch (NoSuchMethodException noArgsMissing) {
+                safeArgs = new Object[]{null};
+                constructor = findConstructor(clazz, safeArgs);
+            }
         } else {
-            constructor = clazz.getDeclaredConstructor((Class<?>[]) null);
+            constructor = findConstructor(clazz, safeArgs);
         }
-
         constructor.setAccessible(true);
 
-        return constructor.newInstance(args);
+        return constructor.newInstance(safeArgs);
     }
 
     /**
@@ -76,15 +80,21 @@ public final class Caller {
     public static Object callStatic(Class<?> invokeOn, String name, Object... args)
             throws IllegalAccessException, InvocationTargetException {
 
-        Class<?>[] types = null;
-        if (args != null) {
-            types = Arrays.stream(args).map(Object::getClass).toArray(Class[]::new);
+        Object[] safeArgs = args == null ? new Object[0] : args;
+        Method method;
+        if (args == null) {
+            try {
+                method = getMethod(name, safeArgs, invokeOn);
+            } catch (IllegalArgumentException noArgsMissing) {
+                safeArgs = new Object[]{null};
+                method = getMethod(name, safeArgs, invokeOn);
+            }
+        } else {
+            method = getMethod(name, safeArgs, invokeOn);
         }
 
-        Method method = getMethod(name, types, invokeOn);
-
         method.setAccessible(true);
-        return method.invoke(null, args);
+        return method.invoke(null, safeArgs);
     }
 
     /**
@@ -100,31 +110,103 @@ public final class Caller {
     public static Object callMethod(Object invokeOn, String name, Object... args)
             throws IllegalAccessException, InvocationTargetException {
 
-        Class<?>[] types = null;
-        if (args != null) {
-            types = Arrays.stream(args).map(Object::getClass).toArray(Class[]::new);
+        Object[] safeArgs = args == null ? new Object[0] : args;
+        Method method;
+        if (args == null) {
+            try {
+                method = getMethod(name, safeArgs, invokeOn.getClass());
+            } catch (IllegalArgumentException noArgsMissing) {
+                safeArgs = new Object[]{null};
+                method = getMethod(name, safeArgs, invokeOn.getClass());
+            }
+        } else {
+            method = getMethod(name, safeArgs, invokeOn.getClass());
         }
-
-        Method method = getMethod(name, types, invokeOn.getClass());
         method.setAccessible(true);
 
-        return method.invoke(invokeOn, args);
+        return method.invoke(invokeOn, safeArgs);
     }
 
-    private static Method getMethod(String name, Class<?>[] types, Class<?> type) {
-        Method method = null;
+    private static Method getMethod(String name, Object[] args, Class<?> type) {
         Class<?> classType = type;
 
-        while (method == null) {
-            try {
-                method = classType.getDeclaredMethod(name, types);
-            } catch (NoSuchMethodException e) {
-                classType = classType.getSuperclass();
-                if (classType == Object.class) {
-                    throw new IllegalArgumentException("Couldn't find method " + name, e);
+        while (classType != null) {
+            Method[] methods = classType.getDeclaredMethods();
+            for (Method candidate : methods) {
+                if (!candidate.getName().equals(name)) {
+                    continue;
+                }
+                if (areParametersCompatible(candidate.getParameterTypes(), args)) {
+                    return candidate;
                 }
             }
+            classType = classType.getSuperclass();
         }
-        return method;
+
+        throw new IllegalArgumentException("Couldn't find method " + name);
+    }
+
+    private static <T> Constructor<? extends T> findConstructor(Class<? extends T> clazz, Object[] args)
+            throws NoSuchMethodException {
+        Constructor<?>[] constructors = clazz.getDeclaredConstructors();
+        for (Constructor<?> candidate : constructors) {
+            if (areParametersCompatible(candidate.getParameterTypes(), args)) {
+                @SuppressWarnings("unchecked")
+                Constructor<? extends T> ctor = (Constructor<? extends T>) candidate;
+                return ctor;
+            }
+        }
+        throw new NoSuchMethodException("Couldn't find constructor for " + clazz.getName());
+    }
+
+    private static boolean areParametersCompatible(Class<?>[] parameterTypes, Object[] args) {
+        if (parameterTypes.length != args.length) {
+            return false;
+        }
+        for (int i = 0; i < parameterTypes.length; i++) {
+            if (!isCompatible(parameterTypes[i], args[i])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean isCompatible(Class<?> parameterType, Object arg) {
+        if (arg == null) {
+            return !parameterType.isPrimitive();
+        }
+        Class<?> argType = arg.getClass();
+        if (parameterType.isPrimitive()) {
+            parameterType = wrapPrimitive(parameterType);
+        }
+        return parameterType.isAssignableFrom(argType);
+    }
+
+    private static Class<?> wrapPrimitive(Class<?> type) {
+        if (type == boolean.class) {
+            return Boolean.class;
+        }
+        if (type == byte.class) {
+            return Byte.class;
+        }
+        if (type == char.class) {
+            return Character.class;
+        }
+        if (type == short.class) {
+            return Short.class;
+        }
+        if (type == int.class) {
+            return Integer.class;
+        }
+        if (type == long.class) {
+            return Long.class;
+        }
+        if (type == float.class) {
+            return Float.class;
+        }
+        if (type == double.class) {
+            return Double.class;
+        }
+        return type;
     }
 }
